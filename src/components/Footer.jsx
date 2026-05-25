@@ -21,7 +21,7 @@ export default function Footer({ buyerType, language }) {
       newsletterTitle: "Estate Chronicles",
       newsletterPlaceholder: "Enter your email for spice tips...",
       subscribe: "Subscribe",
-      rights: "© 2026 Ceylon Spice Reserve. All rights reserved. Galle, Sri Lanka.",
+      rights: "© 2026 500 Labs. All rights reserved.",
       certOrganic: "USDA Organic",
       certSLS: "SLS Certified",
       certISO: "ISO 22000",
@@ -46,12 +46,7 @@ export default function Footer({ buyerType, language }) {
       newsletterTitle: "කුළුබඩු තොරතුරු",
       newsletterPlaceholder: "ඔබේ විද්‍යුත් තැපෑල ඇතුළත් කරන්න...",
       subscribe: "ලියාපදිංචි වන්න",
-      rights: "© 2026 සෙලෝන් ස්පයිස් රිසර්ව්. සියලුම හිමිකම් ඇවිරිණි. ගාල්ල, ශ්‍රී ලංකාව.",
-      certOrganic: "කාබනික සහතිකලත්",
-      certSLS: "SLS ප්‍රමිතිකරණය",
-      certISO: "ISO 22000 සහතිකය",
-      certHACCP: "HACCP ප්‍රමිතිකරණය",
-      certFair: "සාධාරණ වෙළඳ වතුයාය",
+      rights: "© 2026 500 Labs. All rights reserved.",
     },
   }[language]
 
@@ -125,13 +120,6 @@ export default function Footer({ buyerType, language }) {
       <div className="footer-bottom">
         <div className="container footer-bottom-inner">
           <p className="footer-copyright-text">{t.rights}</p>
-          <div className="footer-cert-stamps">
-            <span className="footer-cert-tag">🍃 {t.certOrganic}</span>
-            <span className="footer-cert-tag">📜 {t.certSLS}</span>
-            <span className="footer-cert-tag">🛡️ {t.certISO}</span>
-            <span className="footer-cert-tag">✅ {t.certHACCP}</span>
-            <span className="footer-cert-tag">🤝 {t.certFair}</span>
-          </div>
         </div>
       </div>
     </footer>
