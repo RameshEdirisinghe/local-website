@@ -3,6 +3,7 @@ import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import Products from './components/Products'
 import About from './components/About'
+import Gallery from './components/Gallery'
 import Reviews from './components/Reviews'
 import Footer from './components/Footer'
 import Cart from './components/Cart'
@@ -114,6 +115,8 @@ export default function App() {
         />
         
         <About buyerType={buyerType} language={language} />
+        
+        <Gallery language={language} />
         
         <Reviews buyerType={buyerType} language={language} />
       </main>

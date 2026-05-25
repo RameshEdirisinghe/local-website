@@ -1,0 +1,346 @@
+/* Gallery Section Styles */
+
+.gallery-section {
+  padding: var(--space-section) 0;
+  background: var(--clr-forest); /* Luxury deep green backdrop to make photos pop */
+  color: var(--clr-cream);
+  overflow: hidden;
+  border-top: 1px solid var(--clr-gold);
+  border-bottom: 1px solid var(--clr-gold);
+}
+
+.gallery-header-block {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.gallery-header-block .section-label {
+  color: var(--clr-gold-light);
+}
+
+.gallery-title {
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 400;
+  color: var(--clr-cream-light);
+  margin-top: 8px;
+  margin-bottom: 16px;
+}
+
+.gallery-subtitle {
+  max-width: 650px;
+  margin-inline: auto;
+  color: var(--clr-cream-dark);
+  opacity: 0.8;
+  font-size: 15px;
+}
+
+/* Infinite Scrolling Ribbon */
+.gallery-scroll-ticker-outer {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  padding: 10px 0;
+}
+
+/* Linear gradients on edges to create smooth vanishing borders */
+.gallery-scroll-ticker-outer::before,
+.gallery-scroll-ticker-outer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: clamp(60px, 12vw, 180px);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.gallery-scroll-ticker-outer::before {
+  left: 0;
+  background: linear-gradient(to right, var(--clr-forest) 0%, transparent 100%);
+}
+
+.gallery-scroll-ticker-outer::after {
+  right: 0;
+  background: linear-gradient(to left, var(--clr-forest) 0%, transparent 100%);
+}
+
+.gallery-scroll-ticker-inner {
+  display: flex;
+  gap: 24px;
+  width: max-content;
+  animation: smoothMarquee 42s linear infinite;
+  align-items: center;
+}
+
+/* Pause on Hover */
+.gallery-scroll-ticker-inner:hover {
+  animation-play-state: paused;
+}
+
+@keyframes smoothMarquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* Asymmetrical Card Frames */
+.gallery-card-frame {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(197, 157, 95, 0.3);
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  transition: transform var(--transition-smooth), border-color var(--transition-smooth), box-shadow var(--transition-smooth);
+  flex-shrink: 0;
+}
+
+.gallery-card-frame:hover {
+  transform: scale(1.03) translateY(-4px);
+  border-color: var(--clr-gold);
+  box-shadow: var(--shadow-lg);
+}
+
+.gallery-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.gallery-card-frame:hover .gallery-card-img {
+  transform: scale(1.05);
+}
+
+/* Asymmetrical Dimensions */
+.portrait-tall {
+  width: 280px;
+  height: 420px;
+}
+
+.square-big {
+  width: 320px;
+  height: 320px;
+}
+
+.landscape-wide {
+  width: 460px;
+  height: 320px;
+}
+
+.square-small {
+  width: 260px;
+  height: 260px;
+}
+
+.landscape-medium {
+  width: 380px;
+  height: 280px;
+}
+
+.portrait-medium {
+  width: 260px;
+  height: 360px;
+}
+
+/* Overlays on frame */
+.gallery-card-overlay-details {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10, 31, 17, 0.95) 0%, rgba(10, 31, 17, 0.4) 50%, rgba(10, 31, 17, 0.1) 100%);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  opacity: 0;
+  transition: opacity var(--transition-smooth);
+}
+
+.gallery-card-frame:hover .gallery-card-overlay-details {
+  opacity: 1;
+}
+
+.gallery-card-badge {
+  font-family: var(--ff-ui);
+  font-size: 9px;
+  color: var(--clr-gold-light);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 6px;
+}
+
+.gallery-card-overlay-details h4 {
+  font-size: 1.4rem;
+  color: var(--clr-cream-light);
+  margin-bottom: 4px;
+}
+
+.gallery-card-overlay-details p {
+  font-size: 13px;
+  color: var(--clr-cream-dark);
+  line-height: 1.4;
+  opacity: 0.9;
+}
+
+/* Lightbox Modal Styles */
+.gallery-lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(10, 31, 17, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.gallery-lightbox-card {
+  width: 100%;
+  max-width: 800px;
+  background: var(--clr-cream-light);
+  border: 1px solid var(--clr-gold);
+  border-radius: var(--radius-lg);
+  display: flex;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  max-height: 90vh;
+}
+
+.btn-close-lightbox {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  background: rgba(10, 31, 17, 0.8);
+  border-radius: 50%;
+  color: var(--clr-cream);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all var(--transition-fast);
+}
+
+.btn-close-lightbox:hover {
+  background: var(--clr-gold);
+  color: var(--clr-forest);
+}
+
+.lightbox-media-box {
+  flex: 1.2;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-height: 500px;
+}
+
+.lightbox-media-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.lightbox-details-panel {
+  flex: 0.8;
+  padding: 40px;
+  color: var(--clr-forest);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.lightbox-country-badge {
+  font-family: var(--ff-ui);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--clr-gold-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+}
+
+.lightbox-details-panel h3 {
+  font-size: 2rem;
+  margin-bottom: 12px;
+}
+
+.lightbox-details-panel p {
+  font-size: 15px;
+  color: var(--clr-text);
+  line-height: 1.6;
+}
+
+/* Responsive Media Queries */
+@media (max-width: 768px) {
+  .gallery-lightbox-card {
+    flex-direction: column;
+    max-height: 92vh;
+  }
+  
+  .lightbox-media-box {
+    flex: 1;
+    max-height: 250px;
+  }
+  
+  .lightbox-details-panel {
+    flex: 1;
+    padding: 24px;
+  }
+
+  .lightbox-details-panel h3 {
+    font-size: 1.6rem;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Scale down the ticker frames on small mobile viewports to make it look perfect */
+  .portrait-tall {
+    width: 180px;
+    height: 260px;
+  }
+
+  .square-big {
+    width: 200px;
+    height: 200px;
+  }
+
+  .landscape-wide {
+    width: 260px;
+    height: 200px;
+  }
+
+  .square-small {
+    width: 160px;
+    height: 160px;
+  }
+
+  .landscape-medium {
+    width: 220px;
+    height: 170px;
+  }
+
+  .portrait-medium {
+    width: 160px;
+    height: 220px;
+  }
+  
+  .gallery-card-overlay-details {
+    padding: 12px;
+  }
+  
+  .gallery-card-overlay-details h4 {
+    font-size: 1.1rem;
+  }
+  
+  .gallery-card-overlay-details p {
+    font-size: 11px;
+  }
+}
