@@ -1,7 +1,7 @@
 /* Products Section Styles */
 
 .products-section {
-  padding: 100px 0;
+  padding: var(--space-section) 0;
   background: var(--clr-cream);
   border-top: 1px solid var(--clr-border);
   position: relative;
@@ -9,11 +9,11 @@
 
 .products-header {
   text-align: center;
-  margin-bottom: 70px;
+  margin-bottom: clamp(40px, 8vw, 75px);
 }
 
 .products-title {
-  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  font-size: clamp(2rem, 4vw, 3.2rem);
   font-weight: 400;
   color: var(--clr-forest);
   margin-top: 8px;
@@ -24,7 +24,7 @@
   max-width: 650px;
   margin-inline: auto;
   color: var(--clr-muted);
-  font-size: 16px;
+  font-size: clamp(15px, 1.5vw, 17px);
 }
 
 /* Products Grid */
@@ -42,7 +42,7 @@
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow-md);
-  transition: transform var(--transition-smooth), box-shadow var(--transition-smooth);
+  transition: transform var(--transition-smooth), box-shadow var(--transition-smooth), border-color var(--transition-smooth);
 }
 
 .product-card-luxury:hover {
@@ -52,7 +52,7 @@
 }
 
 .product-card-visual {
-  flex: 1.1;
+  flex: 1;
   position: relative;
   overflow: hidden;
   background: var(--clr-dark);
@@ -67,19 +67,19 @@
 }
 
 .product-card-luxury:hover .product-card-img {
-  transform: scale(1.05);
+  transform: scale(1.04);
 }
 
 .product-badge-overlay {
   position: absolute;
   top: 24px;
   left: 24px;
-  background: rgba(13, 35, 20, 0.85);
+  background: rgba(10, 31, 17, 0.85);
   border: 1px solid var(--clr-gold);
   color: var(--clr-gold-light);
   padding: 6px 14px;
   font-family: var(--ff-ui);
-  font-size: 11px;
+  font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   font-weight: 500;
@@ -89,8 +89,8 @@
 
 /* Details Box */
 .product-card-details {
-  flex: 1.3;
-  padding: 48px;
+  flex: 1.25;
+  padding: clamp(24px, 4vw, 48px);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -105,7 +105,7 @@
 }
 
 .product-name {
-  font-size: 2rem;
+  font-size: clamp(24px, 2.5vw, 32px);
   color: var(--clr-forest);
   font-weight: 500;
   line-height: 1.1;
@@ -117,6 +117,7 @@
   color: var(--clr-gold-dark);
   font-style: italic;
   margin-left: 10px;
+  white-space: nowrap;
 }
 
 .product-certifications-badges {
@@ -142,14 +143,14 @@
   font-family: var(--ff-display);
   font-style: italic;
   color: var(--accent-color);
-  font-size: 1.2rem;
+  font-size: clamp(16px, 1.8vw, 20px);
   margin-bottom: 16px;
 }
 
 .product-description {
   color: var(--clr-text);
   font-size: 16px;
-  line-height: 1.6;
+  line-height: 1.65;
   margin-bottom: 28px;
 }
 
@@ -163,7 +164,7 @@
 
 .grade-label-title {
   font-family: var(--ff-ui);
-  font-size: 12px;
+  font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--clr-muted);
@@ -207,7 +208,7 @@
   color: var(--clr-muted);
   padding-left: 12px;
   border-left: 2px solid var(--clr-gold);
-  min-height: 44px;
+  min-height: 45px;
 }
 
 /* Purchasing Box */
@@ -243,7 +244,7 @@
 
 .price-value {
   font-family: var(--ff-display);
-  font-size: 2.4rem;
+  font-size: 2.2rem;
   font-weight: 600;
   line-height: 1;
 }
@@ -376,10 +377,26 @@
   
   .product-card-img {
     min-height: 380px;
+    height: 380px;
+  }
+}
+
+@media (max-width: 768px) {
+  .grade-tabs-list {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 8px;
+    /* Hide scrollbars */
+    scrollbar-width: none; /* Firefox */
   }
   
-  .product-card-details {
-    padding: 30px;
+  .grade-tabs-list::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+  }
+
+  .grade-tab-btn {
+    flex-shrink: 0;
   }
 }
 
@@ -395,7 +412,7 @@
   
   .product-purchasing-box {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 16px;
   }
   

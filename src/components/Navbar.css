@@ -14,10 +14,10 @@
 
 .navbar-header--scrolled {
   padding: 12px 0;
-  background: rgba(13, 35, 20, 0.95); /* Deep Forest Green */
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(197, 157, 95, 0.2); /* Gold accent border */
+  background: rgba(10, 31, 17, 0.95); /* Deep Forest Green */
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(197, 157, 95, 0.25); /* Gold accent border */
   box-shadow: var(--shadow-md);
 }
 
@@ -32,6 +32,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  user-select: none;
 }
 
 .navbar-logo__icon {
@@ -46,7 +47,7 @@
 
 .brand-main {
   font-family: var(--ff-display);
-  font-size: 20px;
+  font-size: clamp(18px, 1.8vw, 22px);
   font-weight: 600;
   color: var(--clr-gold);
   line-height: 1.1;
@@ -54,13 +55,12 @@
 }
 
 .navbar-header:not(.navbar-header--scrolled) .brand-main {
-  /* On hero background, make it bright gold */
   color: var(--clr-gold-light);
 }
 
 .brand-sub {
   font-family: var(--ff-ui);
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.3em;
@@ -72,7 +72,7 @@
 .navbar-nav {
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: clamp(16px, 3vw, 36px);
 }
 
 .nav-link {
@@ -112,7 +112,7 @@
 .navbar-actions {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: clamp(10px, 1.5vw, 20px);
 }
 
 /* Buyer Badge toggle button */
@@ -126,7 +126,7 @@
   border-radius: var(--radius-pill);
   color: var(--clr-cream);
   font-family: var(--ff-ui);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 500;
   transition: all var(--transition-fast);
 }
@@ -231,6 +231,7 @@
   display: none;
   color: var(--clr-cream);
   cursor: pointer;
+  z-index: 120;
   transition: transform var(--transition-fast);
 }
 
@@ -247,38 +248,34 @@
   .nav-link {
     font-size: 12px;
   }
-  .navbar-nav {
-    gap: 20px;
-  }
-  .cart-trigger-text {
-    display: none;
-  }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 860px) {
   .navbar-header {
     padding: 16px 0;
-    background: rgba(13, 35, 20, 0.98);
+    background: rgba(10, 31, 17, 0.98);
+    border-bottom: 1px solid rgba(197, 157, 95, 0.2);
   }
 
   .navbar-burger-btn {
     display: block;
-    z-index: 110;
   }
 
   .navbar-nav {
     position: fixed;
     top: 0;
     right: 0;
-    width: 280px;
+    width: min(290px, 100vw);
     height: 100vh;
-    background: var(--clr-forest);
-    border-left: 1px solid var(--clr-gold);
+    background: rgba(10, 31, 17, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-left: 1px solid rgba(197, 157, 95, 0.3);
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    padding: 100px 30px;
-    gap: 30px;
+    padding: 100px 32px;
+    gap: 24px;
     transform: translateX(100%);
     transition: transform var(--transition-smooth);
     box-shadow: var(--shadow-lg);
@@ -289,26 +286,29 @@
   }
 
   .nav-link {
-    font-size: 16px;
+    font-size: 15px;
     width: 100%;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding-bottom: 12px;
   }
 
   .navbar-actions {
     gap: 12px;
+    margin-right: 12px; /* Make space for hamburger button */
   }
 
-  .buyer-badge {
-    padding: 6px 10px;
+  .buyer-type-dropdown,
+  .currency-selector {
+    display: none !important;
   }
 
   .badge-text {
-    display: none; /* Hide text on super small screens, show only flag */
+    display: none; /* Hide text on small screens, show only flag */
   }
 
   .mobile-selectors {
     display: block;
-    margin-top: 40px;
+    margin-top: 36px;
     width: 100%;
   }
 
@@ -328,17 +328,19 @@
 
   .buyer-toggle-buttons {
     display: flex;
-    gap: 10px;
+    gap: 8px;
+    width: 100%;
   }
 
   .btn-mode {
     flex: 1;
-    padding: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 8px 4px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
     color: var(--clr-cream-dark);
-    font-size: 13px;
+    font-size: 12px;
     border-radius: var(--radius-sm);
     text-align: center;
+    transition: all var(--transition-fast);
   }
 
   .btn-mode.active {
@@ -346,5 +348,14 @@
     color: var(--clr-forest);
     border-color: var(--clr-gold);
     font-weight: 600;
+  }
+}
+
+@media (max-width: 480px) {
+  .brand-sub {
+    display: none; /* Hide subtext on extremely small screens to fit currency */
+  }
+  .cart-trigger-text {
+    display: none; /* Hide text on cart to save horizontal space */
   }
 }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { ShoppingBag, Globe, Menu, X, Landmark } from 'lucide-react'
+import { ShoppingBag, Globe, Menu, X } from 'lucide-react'
 import './Navbar.css'
 
 export default function Navbar({
@@ -30,6 +30,8 @@ export default function Navbar({
       localBuyer: 'Local Buyer',
       foreignBuyer: 'Export/Global',
       cart: 'Cart',
+      buyerMode: 'Buyer Mode',
+      currency: 'Currency',
     },
     SI: {
       products: 'නිෂ්පාදන',
@@ -38,6 +40,8 @@ export default function Navbar({
       localBuyer: 'දේශීය ගැනුම්කරු',
       foreignBuyer: 'අපනයන / විදේශීය',
       cart: 'කරත්තය',
+      buyerMode: 'ගැනුම්කරුගේ ප්‍රකාරය',
+      currency: 'මුදල් වර්ගය',
     },
   }[language]
 
@@ -53,7 +57,7 @@ export default function Navbar({
           </div>
         </a>
 
-        {/* Desktop Navigation Links */}
+        {/* Navigation Links & Mobile Drawer */}
         <nav className={`navbar-nav ${menuOpen ? 'navbar-nav--open' : ''}`}>
           <a href="#products" className="nav-link" onClick={() => setMenuOpen(false)}>
             {t.products}
@@ -68,13 +72,12 @@ export default function Navbar({
           {/* Mobile selectors inside drawer */}
           <div className="mobile-selectors">
             <div className="buyer-toggle-wrap">
-              <span className="selector-title">Buyer Mode</span>
+              <span className="selector-title">{t.buyerMode}</span>
               <div className="buyer-toggle-buttons">
                 <button
                   className={`btn-mode ${buyerType === 'local' ? 'active' : ''}`}
                   onClick={() => {
                     setBuyerType('local')
-                    setMenuOpen(false)
                   }}
                 >
                   🇱🇰 Local
@@ -83,19 +86,38 @@ export default function Navbar({
                   className={`btn-mode ${buyerType === 'foreign' ? 'active' : ''}`}
                   onClick={() => {
                     setBuyerType('foreign')
-                    setMenuOpen(false)
                   }}
                 >
                   🌐 Export
                 </button>
               </div>
             </div>
+
+            {buyerType === 'foreign' && (
+              <div className="buyer-toggle-wrap" style={{ marginTop: '20px' }}>
+                <span className="selector-title">{t.currency}</span>
+                <div className="buyer-toggle-buttons">
+                  <button
+                    className={`btn-mode ${currency === 'USD' ? 'active' : ''}`}
+                    onClick={() => setCurrency('USD')}
+                  >
+                    USD ($)
+                  </button>
+                  <button
+                    className={`btn-mode ${currency === 'EUR' ? 'active' : ''}`}
+                    onClick={() => setCurrency('EUR')}
+                  >
+                    EUR (€)
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </nav>
 
         {/* Right Side Actions */}
         <div className="navbar-actions">
-          {/* Buyer Type Switcher (Desktop) */}
+          {/* Buyer Type Switcher (Desktop Only - hidden on mobile via CSS) */}
           <div className="buyer-type-dropdown">
             <button
               className="buyer-badge"
@@ -116,7 +138,7 @@ export default function Navbar({
             </button>
           </div>
 
-          {/* Currency Switcher (if Global Buyer) */}
+          {/* Currency Switcher (Desktop Only - hidden on mobile via CSS) */}
           {buyerType === 'foreign' && (
             <div className="currency-selector">
               <Globe className="icon-globe" size={16} />
