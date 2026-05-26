@@ -166,3 +166,30 @@
   line-height: 1.8;
   color: var(--clr-text);
 }
+
+/* Convincing marketing callout box for buyers */
+.spec-pitch-box {
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: rgba(197, 157, 95, 0.06);
+  border-left: 4px solid var(--clr-gold);
+  border-radius: 4px;
+}
+
+.spec-pitch-title {
+  font-family: var(--ff-ui);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--clr-gold-dark);
+  margin-bottom: 0.5rem;
+}
+
+.spec-pitch-text {
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--clr-text);
+  font-style: italic;
+}
