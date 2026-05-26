@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './Products.css'
 import gingerProduct from '../assets/images/ginger_product.png'
-import naimirisProduct from '../assets/images/naimiris_product.png'
+import naimirisProduct from '../assets/images/naimiris_premium.png'
 
 const PRODUCTS_DATA = [
   {

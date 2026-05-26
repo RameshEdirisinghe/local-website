@@ -1,43 +1,41 @@
 import { useState } from 'react'
 import './Gallery.css'
 
-// Importing images
-import peelingGallery from '../assets/images/peeling_gallery.png'
-import matDryingGallery from '../assets/images/mat_drying_gallery.png'
-import marketGallery from '../assets/images/market_gallery.png'
-import gingerProduct from '../assets/images/ginger_product.png'
-import naimirisProduct from '../assets/images/naimiris_product.png'
-import plantationHero from '../assets/images/plantation_hero.png'
+// Importing enhanced and raw assets
+import gingerEnhanced from '../assets/images/ginger_enhanced.png'
 import greenMirisPremium from '../assets/images/green_miris_premium.png'
-import naimirisPremium from '../assets/images/naimiris_premium.png'
+import naimirisPlantEnhanced from '../assets/images/naimiris_plant_enhanced.png'
+import gingerPlant from '../assets/images/ginger_plant.jpg'
+import plantationHero from '../assets/images/plantation_hero.png'
+import naimirisEnhanced from '../assets/images/naimiris_enhanced.png'
 
 const GALLERY_IMAGES = [
   {
     id: 1,
-    url: peelingGallery,
-    title: { EN: 'Artisan Ginger Harvesting', SI: 'ඉඟුරු අස්වනු නෙලීම' },
-    desc: { EN: 'Traditional hand-cleaning of ginger rhizomes passed down generations.', SI: 'දේශීය ගොවීන් විසින් අතින්ම පිරිසිදු කර සකස් කරන නැවුම් ඉඟුරු.' },
+    url: gingerEnhanced,
+    title: { EN: 'Artisan Sliced Ceylon Ginger', SI: 'කපා සකස් කළ නැවුම් ලංකා ඉඟුරු' },
+    desc: { EN: 'Sun-cured local ginger root, rich in [6]-gingerol active compound and low in fiber.', SI: 'තන්තු අඩු සහ ඉහළ ජින්ජරෝල් අඩංගු අතින් කපා වියළන ලද දේශීය ලංකා ඉඟුරු.' },
     aspect: 'portrait-tall'
   },
   {
     id: 2,
     url: greenMirisPremium,
-    title: { EN: 'Vibrant Green Miris', SI: 'නැවුම් අමු මිරිස්' },
-    desc: { EN: 'Freshly harvested Ceylon green chili, packed with tropical flavor.', SI: 'නැවුම්ව නෙළාගත් ලංකා අමු මිරිස්, නිවර්තන රසයෙන් පිරී ඇත.' },
+    title: { EN: 'Fresh Ceylon Green Miris', SI: 'නැවුම් ලංකා අමු මිරිස්' },
+    desc: { EN: 'Crisp and fiery Ceylon green chilies harvested fresh from domestic organic estates.', SI: 'දේශීය කාබනික වගා බිම් වලින් නැවුම්ව නෙළාගත් සැර සහ නැවුම් අමු මිරිස්.' },
     aspect: 'square-big'
   },
   {
     id: 3,
-    url: marketGallery,
-    title: { EN: 'Clay Pot Curing', SI: 'මැටි බඳුන්වල කුළුබඩු' },
-    desc: { EN: 'Aromatic cured whole spices stored organically.', SI: 'මැටි බඳුන්වල අසුරා ඇති නැවුම් සුවඳවත් ලංකා කුළුබඩු.' },
+    url: naimirisPlantEnhanced,
+    title: { EN: 'Pure Organic Nai Miris Shrub', SI: 'කාබනික නයි මිරිස් වගාව' },
+    desc: { EN: 'Vibrant red cobra pods ripening naturally on healthy branches under rain-fed conditions.', SI: 'ස්වාභාවික වැසි ජලයෙන් පෝෂණය වී සාරවත් ලෙස පීදෙන නැවුම් නයි මිරිස් කරල්.' },
     aspect: 'landscape-wide'
   },
   {
     id: 4,
-    url: gingerProduct,
-    title: { EN: 'Premium Ceylon Ginger', SI: 'ප්‍රමිතියෙන් ඉහළ ලංකා ඉඟුරු' },
-    desc: { EN: 'Zesty, fiber-rich organic ginger root ready for export.', SI: 'නැවුම්, තන්තු බහුල කාබනික ඉඟුරු අපනයනය සඳහා සූදානම්.' },
+    url: gingerPlant,
+    title: { EN: 'Ceylon Local Ginger Plant', SI: 'දේශීය ලංකා ඉඟුරු පැලෑටිය' },
+    desc: { EN: 'Lush, spear-like leaves of high-pungency local ginger cultivars in Matale soil.', SI: 'මාතලේ සාරවත් පසෙහි වැඩෙන ඉහළ සැර සහ සුවඳැති දේශීය ඉඟුරු පත්‍ර.' },
     aspect: 'square-small'
   },
   {
@@ -49,9 +47,9 @@ const GALLERY_IMAGES = [
   },
   {
     id: 6,
-    url: naimirisPremium,
-    title: { EN: 'Hot Dragon Nai Miris', SI: 'සැර නයි මිරිස්' },
-    desc: { EN: 'Premium export-quality Sri Lankan Habanero pods packed with intense fiery flavor.', SI: 'ඉහළම සැර සහ සුවඳ ගෙනදෙන අපනයන මට්ටමේ නැවුම් නයි මිරිස් කරල්.' },
+    url: naimirisEnhanced,
+    title: { EN: 'Fiery Ceylon Nai Miris Pods', SI: 'සැර නයි මිරිස් කරල්' },
+    desc: { EN: 'Deep crimson, deeply wrinkled export-grade Cobra pods packed with 150k–350k SHU heat.', SI: 'ඉහළම අපනයන තත්ත්වයේ පවතින දැඩි සැර සහ සුවඳැති නයි මිරිස් කරල්.' },
     aspect: 'portrait-medium'
   }
 ]
