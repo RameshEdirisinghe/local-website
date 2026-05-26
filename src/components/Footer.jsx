@@ -4,10 +4,10 @@ import './Footer.css'
 export default function Footer({ buyerType, language }) {
   const t = {
     EN: {
-      tagline: "Connecting the world with Sri Lanka's finest cinnamon and black pepper. Pure, ethical, and traceable from estate to shelf.",
+      tagline: "Connecting the world with Sri Lanka's finest ginger and hot dragon nai miris. Pure, ethical, and traceable from estate to shelf.",
       products: "Products",
-      cinnamon: "Ceylon Cinnamon",
-      pepper: "Ceylon Black Pepper",
+      cinnamon: "Ceylon Ginger",
+      pepper: "Hot Dragon Nai Miris",
       samples: "Sample Requests",
       bulk: "Bulk Export Quoting",
       company: "Company",
@@ -29,10 +29,10 @@ export default function Footer({ buyerType, language }) {
       certFair: "Fair Trade Estate",
     },
     SI: {
-      tagline: "ශ්‍රී ලංකාවේ විශිෂ්ටතම කුරුඳු සහ ගම්මිරිස් ලොව පුරා සිටින පාරිභෝගිකයින් වෙත ගෙනයාම. 100% ක් පිරිසිදු, සදාචාරාත්මක සහ ගුණාත්මක නිෂ්පාදන.",
+      tagline: "ශ්‍රී ලංකාවේ විශිෂ්ටතම ඉඟුරු සහ සැර නයි මිරිස් ලොව පුරා සිටින පාරිභෝගිකයින් වෙත ගෙනයාම. 100% ක් පිරිසිදු, සදාචාරාත්මක සහ ගුණාත්මක නිෂ්පාදන.",
       products: "නිෂ්පාදන",
-      cinnamon: "සැබෑ ලංකා කුරුඳු",
-      pepper: "ලංකා ගම්මිරිස්",
+      cinnamon: "දේශීය ලංකා ඉඟුරු",
+      pepper: "නයි මිරිස්",
       samples: "නියැදි ඇණවුම්",
       bulk: "තොග අපනයන මිල ගණන්",
       company: "ආයතනය",

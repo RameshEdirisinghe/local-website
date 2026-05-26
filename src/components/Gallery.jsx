@@ -5,23 +5,23 @@ import './Gallery.css'
 import peelingGallery from '../assets/images/peeling_gallery.png'
 import matDryingGallery from '../assets/images/mat_drying_gallery.png'
 import marketGallery from '../assets/images/market_gallery.png'
-import cinnamonProduct from '../assets/images/cinnamon_product.png'
-import pepperProduct from '../assets/images/pepper_product.png'
+import gingerProduct from '../assets/images/ginger_product.png'
+import naimirisProduct from '../assets/images/naimiris_product.png'
 import plantationHero from '../assets/images/plantation_hero.png'
 
 const GALLERY_IMAGES = [
   {
     id: 1,
     url: peelingGallery,
-    title: { EN: 'Artisan Quill Peeling', SI: 'කුරුඳු පීලි සකස් කිරීම' },
-    desc: { EN: 'Traditional hand-peeling passed down generations in Galle.', SI: 'ගාල්ලේ සාම්ප්‍රදායික ශිල්පීන් විසින් අතින්ම සකස් කරන සැබෑ කුරුඳු පීලි.' },
+    title: { EN: 'Artisan Ginger Harvesting', SI: 'ඉඟුරු අස්වනු නෙලීම' },
+    desc: { EN: 'Traditional hand-cleaning of ginger rhizomes passed down generations.', SI: 'දේශීය ගොවීන් විසින් අතින්ම පිරිසිදු කර සකස් කරන නැවුම් ඉඟුරු.' },
     aspect: 'portrait-tall'
   },
   {
     id: 2,
     url: matDryingGallery,
     title: { EN: 'Sun Drying Spices', SI: 'අව්වේ වියළන කුළුබඩු' },
-    desc: { EN: 'Pepper and cinnamon drying naturally under the tropical sun.', SI: 'නිවර්තන සූර්ය රශ්මියෙන් ස්වාභාවිකව වියළන ගම්මිරිස් සහ කුරුඳු.' },
+    desc: { EN: 'Nai miris and ginger drying naturally under the tropical sun.', SI: 'නිවර්තන සූර්ය රශ්මියෙන් ස්වාභාවිකව වියළන ඉඟුරු සහ නයි මිරිස්.' },
     aspect: 'square-big'
   },
   {
@@ -33,9 +33,9 @@ const GALLERY_IMAGES = [
   },
   {
     id: 4,
-    url: cinnamonProduct,
-    title: { EN: 'Pure Cinnamon Quills', SI: 'පිරිසිදු කුරුඳු කූරු' },
-    desc: { EN: 'Premium Alba grade golden layers closely rolled.', SI: 'ඉහළම ප්‍රමිතියේ Alba කාණ්ඩයේ රන්වන් කුරුඳු කූරු.' },
+    url: gingerProduct,
+    title: { EN: 'Premium Ceylon Ginger', SI: 'ප්‍රමිතියෙන් ඉහළ ලංකා ඉඟුරු' },
+    desc: { EN: 'Zesty, fiber-rich organic ginger root ready for export.', SI: 'නැවුම්, තන්තු බහුල කාබනික ඉඟුරු අපනයනය සඳහා සූදානම්.' },
     aspect: 'square-small'
   },
   {
@@ -47,9 +47,9 @@ const GALLERY_IMAGES = [
   },
   {
     id: 6,
-    url: pepperProduct,
-    title: { EN: 'Ceylon Peppercorns', SI: 'ගම්මිරිස් ඇට' },
-    desc: { EN: 'High piperine concentration delivering rich heat.', SI: 'ඉහළම සැර සහ සුවඳ ගෙනදෙන වියළි ගම්මිරිස්.' },
+    url: naimirisProduct,
+    title: { EN: 'Hot Dragon Nai Miris', SI: 'සැර නයි මිරිස්' },
+    desc: { EN: 'Fresh cobra pods packed with fiery flavor and aroma.', SI: 'ඉහළම සැර සහ සුවඳ ගෙනදෙන නැවුම් නයි මිරිස් කරල්.' },
     aspect: 'portrait-medium'
   }
 ]

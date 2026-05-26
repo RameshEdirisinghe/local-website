@@ -41,7 +41,7 @@ export default function Cart({
             <div className="cart-empty-state">
               <span className="empty-cart-icon">🛒</span>
               <h4>Your cart is empty</h4>
-              <p>Explore our premium estate cinnamon and pepper products to add them here.</p>
+              <p>Explore our premium estate ginger and hot dragon nai miris products to add them here.</p>
               <button className="btn btn--primary" onClick={onClose}>
                 Start Shopping
               </button>

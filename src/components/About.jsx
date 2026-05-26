@@ -2,54 +2,54 @@ import { useState } from 'react'
 import './About.css'
 
 export default function About({ buyerType, language }) {
-  const [activeTab, setActiveTab] = useState('ceylon') // 'ceylon' or 'cassia'
+  const [activeTab, setActiveTab] = useState('ceylon') // 'ceylon' or 'chinese'
 
   const t = {
     EN: {
       label: 'Our Story & Heritage',
       title: 'Rooted in the Spice Island',
       lead: "For generations, the fertile soil and tropical rains of southern Sri Lanka have nurtured the world's most exquisite spices. We carry forward this centuries-old legacy.",
-      body1: 'Ceylon cinnamon (Cinnamomum verum) is the only true cinnamon. Discovered and traded by early Arab merchants and later fought over by European colonial powers, it remains the gold standard of culinary spices.',
-      body2: 'Our pepper is grown in forest-gardens alongside tea, coffee, and cocoa, using traditional agroforestry methods. This polyculture method gives Ceylon Black Pepper its uniquely intense, complex piperine heat.',
-      vsTitle: 'Why "True" Ceylon Cinnamon Matters',
-      vsSubtitle: 'Click tabs to compare Ceylon Cinnamon with cheaper Cassia Cinnamon.',
-      tabCeylon: 'True Ceylon Cinnamon',
-      tabCassia: 'Common Cassia Cinnamon',
+      body1: 'Ceylon Ginger (Zingiber officinale) is prized globally for its rich flavor and higher concentration of active gingerols. Hand-harvested by local farming collectives, our ginger represents the pinnacle of premium, soil-to-shelf traceability.',
+      body2: 'Our Hot Dragon Nai Miris is cultivated in agroforestry forest-gardens alongside organic tea and coffee, utilizing traditional polyculture methods. This unique ecosystem yields an unmatched heat combined with a signature sweet, fruity aroma.',
+      vsTitle: 'Why Ceylon Ginger Matters',
+      vsSubtitle: 'Click tabs to compare Ceylon Ginger with cheaper imported Chinese Ginger.',
+      tabCeylon: 'True Ceylon Ginger',
+      tabCassia: 'Common Chinese Ginger',
       origin: 'Origin',
       originValCey: 'Sri Lanka (100% Native)',
-      originValCas: 'China, Indonesia, Vietnam',
-      coumarin: 'Coumarin Content (Toxicity)',
-      coumarinValCey: 'Trace levels (<0.004%) - Safe for daily health use',
-      coumarinValCas: 'High levels (up to 5%) - Potentially toxic to liver',
-      texture: 'Texture & Quill Structure',
-      textureValCey: 'Soft, multi-layered paper quills, hand-rolled',
-      textureValCas: 'Thick, hard bark quills, hollow inside',
+      originValCas: 'China, India, Peru',
+      coumarin: 'Bioactive Compounds',
+      coumarinValCey: 'Extremely high gingerol & shogaol content',
+      coumarinValCas: 'Lower active compounds, often chemically treated',
+      texture: 'Fiber & Texture',
+      textureValCey: 'High fiber, small dense roots with intense oil sacs',
+      textureValCas: 'Low fiber, large watery rhizomes with high water ratio',
       flavor: 'Flavor Profile',
-      flavorValCey: 'Sweet, delicate, complex, with citrus notes',
-      flavorValCas: 'Sharp, spicy, direct, flat flavor',
+      flavorValCey: 'Highly pungent, sweet, with hints of citrus and spice',
+      flavorValCas: 'Mild, watery, flat flavor profile',
     },
     SI: {
       label: 'අපේ ඉතිහාසය සහ උරුමය',
       title: 'කුළුබඩු දූපතේ සැබෑ උරුමය',
       lead: 'පරම්පරා ගණනාවක් තිස්සේ දකුණු ලංකාවේ සාරවත් පස සහ නිවර්තන වර්ෂාව ලොව විශිෂ්ටතම කුළුබඩු වර්ධනයට මඟ පාදා ඇත. අපි එම උරුමය ඉදිරියට ගෙන යන්නෙමු.',
-      body1: 'සැබෑ කුරුඳු (Cinnamomum verum) ලෙස හඳුන්වන්නේ ලංකාවේ කුරුඳු පමණි. පැරණි අරාබි වෙළඳුන් සහ යුරෝපීය ජාතීන් මෙරටට ආකර්ෂණය වූ ප්‍රධාන හේතුව ද මෙයයි.',
-      body2: 'අපේ ගම්මිරිස් වගා කරන්නේ තේ, කෝපි සහ කොකෝවා වැනි බෝග සමඟ මිශ්‍ර වගාවන් ලෙස වන අතර, එමඟින් ශ්‍රී ලංකාවේ ගම්මිරිස්වලට ආවේණික වූ ප්‍රබල සැර සහ ගුණාත්මක බව ලැබී ඇත.',
-      vsTitle: 'සැබෑ ලංකා කුරුඳුවල වටිනාකම',
-      vsSubtitle: 'ලංකා කුරුඳු සහ සාමාන්‍ය කැසියා කුරුඳු අතර වෙනස පහතින් බලන්න.',
-      tabCeylon: 'සැබෑ ලංකා කුරුඳු',
-      tabCassia: 'සාමාන්‍ය කැසියා කුරුඳු',
+      body1: 'දේශීය ඉඟුරු (Zingiber officinale) එහි ඇති ඉහළ ජින්ජරෝල් සහ ෂෝගෝල් ප්‍රතිශතය නිසා සුවිශේෂී ගුණාත්මක බවින් ඉහළය. මෙය දේශීය ගොවි ජනතාව විසින් සාම්ප්‍රදායික ක්‍රම මඟින් වගා කරනු ලබයි.',
+      body2: 'අපේ නයි මිරිස් වගා කරන්නේ තේ සහ කෝපි වැනි බෝග සමඟ මිශ්‍ර වගාවන් ලෙස වන අතර, එමඟින් ශ්‍රී ලංකාවේ නයි මිරිස්වලට ආවේණික වූ සුවිශේෂී සුවඳ සහ ප්‍රබල සැර (Scoville 350,000+) ලැබී ඇත.',
+      vsTitle: 'දේශීය ඉඟුරු වල සැබෑ වටිනාකම',
+      vsSubtitle: 'ලංකා ඉඟුරු සහ සාමාන්‍ය චීන ඉඟුරු අතර වෙනස පහතින් බලන්න.',
+      tabCeylon: 'දේශීය ලංකා ඉඟුරු',
+      tabCassia: 'සාමාන්‍ය චීන ඉඟුරු',
       origin: 'නිෂ්පාදිත රට',
       originValCey: 'ශ්‍රී ලංකාව (100% ආවේණික)',
-      originValCas: 'චීනය, ඉන්දුනීසියාව, වියට්නාමය',
-      coumarin: 'කූමරින් ප්‍රතිශතය (විෂ සහිත බව)',
-      coumarinValCey: 'ඉතා අවම (<0.004%) - දිනපතා භාවිතයට 100% සුරක්ෂිතයි',
-      coumarinValCas: 'ඉතා අධිකයි (5% දක්වා) - අක්මාවට අහිතකර විය හැක',
+      originValCas: 'චීනය, ඉන්දියාව, පේරු',
+      coumarin: 'ඖෂධීය ගුණය',
+      coumarinValCey: 'ඉහළ ජින්ජරෝල් ප්‍රතිශතය - දිනපතා භාවිතයට 100% සුදුසුයි',
+      coumarinValCas: 'ඉතා අවම ඖෂධීය ගුණය, රසායනික ද්‍රව්‍ය අඩංගු විය හැක',
       texture: 'ව්‍යුහය සහ පෙනුම',
-      textureValCey: 'සිහින්, බහු-ස්ථර කඩදාසි මෙන් අතින් රෝල් කරන ලද කූරු',
-      textureValCas: 'ඝන, ඉතා දැඩි, මැද හිස් තනි පොත්තක් වැනි කූරු',
+      textureValCey: 'සිහින්, කෙඳි සහිත, තෙල් ග්‍රන්ථි බහුල කුඩා අල',
+      textureValCas: 'ඝන, විශාල ජල අධික කෙඳි රහිත අල',
       flavor: 'රසය සහ සුවඳ',
-      flavorValCey: 'මිහිරි, මෘදු, සුවඳවත්, පළතුරු රසයක් සහිතයි',
-      flavorValCas: 'තියුණු, තද සැර සහිත, සරල රසය',
+      flavorValCey: 'මිහිරි, තියුණු සැර සුවඳ, ලෙමන් රසයක් සහිතයි',
+      flavorValCas: 'මෘදු, ජල අධික සරල රසය',
     },
   }[language]
 
@@ -78,7 +78,7 @@ export default function About({ buyerType, language }) {
               <span className="h-badge-icon">🤝</span>
               <div>
                 <strong>Ethical Sourcing</strong>
-                <p>Fair Trade with Local Peeler Families</p>
+                <p>Fair Trade with Local Smallholder Farmers</p>
               </div>
             </div>
           </div>
@@ -101,8 +101,8 @@ export default function About({ buyerType, language }) {
                 {t.tabCeylon}
               </button>
               <button
-                className={`comp-tab-btn ${activeTab === 'cassia' ? 'comp-tab-btn--cassia' : ''}`}
-                onClick={() => setActiveTab('cassia')}
+                className={`comp-tab-btn ${activeTab === 'chinese' ? 'comp-tab-btn--chinese' : ''}`}
+                onClick={() => setActiveTab('chinese')}
               >
                 {t.tabCassia}
               </button>
@@ -136,14 +136,14 @@ export default function About({ buyerType, language }) {
               </div>
             </div>
 
-            {/* Sticky warning warning badge for cassia */}
-            {activeTab === 'cassia' ? (
+            {/* Sticky warning warning badge for chinese */}
+            {activeTab === 'chinese' ? (
               <div className="alert-box alert-box--warning">
-                <strong>⚠️ Consumer Tip:</strong> Cassia is often mislabeled as "cinnamon" in supermarkets because it is cheaper, but it does not have the health benefits of true Ceylon cinnamon and can be toxic in large amounts due to high Coumarin content.
+                <strong>⚠️ Consumer Tip:</strong> Chinese or imported ginger is often grown in mass industrial soils with chemical fertilizers, resulting in high water content and a diluted, flat flavor.
               </div>
             ) : (
               <div className="alert-box alert-box--success">
-                <strong>🌿 Health Tip:</strong> True Ceylon Cinnamon contains compounds that aid blood sugar regulation and are packed with rich antioxidants, with absolutely zero toxicity risks.
+                <strong>🌿 Health Tip:</strong> Ceylon Ginger contains significantly higher concentrations of active gingerols, which act as powerful anti-inflammatory and digestive aids with zero chemical enhancers.
               </div>
             )}
           </div>

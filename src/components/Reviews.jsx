@@ -5,12 +5,12 @@ const DEFAULT_REVIEWS = [
   {
     id: 1,
     name: 'Hiroshi Tanaka',
-    role: 'Head Pastry Chef, Tokyo',
+    role: 'Executive Chef & Beverage Director, Tokyo',
     country: '🇯🇵',
     type: 'foreign',
-    product: 'Ceylon Cinnamon — Alba Grade',
+    product: 'Ceylon Ginger — Premium Dried Root',
     rating: 5,
-    text: 'I have been sourcing cinnamon from various suppliers across Asia for 12 years. Nothing comes close to this Alba grade. The aroma is extraordinary — delicate, floral, and genuinely complex. My pastry team refuses to use anything else now.',
+    text: 'I have been sourcing ginger from various suppliers across Asia for 12 years. Nothing comes close to this premium dried root. The aroma is extraordinary — sharp, zesty, and genuinely complex. My pastry and beverage team refuses to use anything else now.',
     avatar: 'HT',
     avatarBg: '#d8b990',
   },
@@ -20,9 +20,9 @@ const DEFAULT_REVIEWS = [
     role: 'Spice Exporter, Colombo',
     country: '🇱🇰',
     type: 'local',
-    product: 'Black Pepper — ASTA Grade',
+    product: 'Hot Dragon Nai Miris — Fresh Cobra Pods',
     rating: 5,
-    text: 'නියම ගුණාත්මක බවින් ඉහළ ගම්මිරිස් සහ කුරුඳු! දේශීය ගැනුම්කරුවන්ටත් ඉතා සාධාරණ මිලකට ලබා දෙනවා. ඇසුරුම්කරණය ඉතාමත් උසස් වන අතර සේවාව ඉතා විශිෂ්ටයි.',
+    text: 'නියම ගුණාත්මක බවින් ඉහළ ඉඟුරු සහ නයි මිරිස්! දේශීය ගැනුම්කරුවන්ටත් ඉතා සාධාරණ මිලකට ලබා දෙනවා. ඇසුරුම්කරණය ඉතාමත් උසස් වන අතර සේවාව ඉතා විශිෂ්ටයි.',
     avatar: 'KP',
     avatarBg: '#adc3a5',
   },
@@ -32,9 +32,9 @@ const DEFAULT_REVIEWS = [
     role: 'Wellness Brand Owner, Milan',
     country: '🇮🇹',
     type: 'foreign',
-    product: 'Ceylon Cinnamon — Quillings',
+    product: 'Ceylon Ginger — Organic Ginger Powder',
     rating: 5,
-    text: 'We use their quillings to produce Ceylon cinnamon extract for our organic supplements. Lab results consistently show high cinnamaldehyde content and zero cassia contamination. Perfect export documents.',
+    text: 'We use their organic ginger powder to produce premium wellness extracts. Lab results consistently show high gingerol content and zero chemical additives. Perfect export documents.',
     avatar: 'AR',
     avatarBg: '#c3a5d8',
   },
@@ -44,9 +44,9 @@ const DEFAULT_REVIEWS = [
     role: 'Home Bakery Owner, Galle',
     country: '🇱🇰',
     type: 'local',
-    product: 'Ceylon Cinnamon — C5 Special',
+    product: 'Ceylon Ginger — Organic Ginger Powder',
     rating: 5,
-    text: 'මම බේකරි නිෂ්පාදන සඳහා හැම මාසෙම ඇණවුම් කරනවා. නැවුම් සුවඳ සහ රස වෙනස් වෙන්නේ නෑ. පාරිභෝගික සේවාවත් ඉතා ඉහළයි. කුරුඳු ඇඟටත් ගොඩක් ගුණ නිසා බය නැතුව පාවිච්චි කරන්න පුළුවන්.',
+    text: 'මම බේකරි නිෂ්පාදන සඳහා හැම මාසෙම ඉඟුරු කුඩු ඇණවුම් කරනවා. නැවුම් සුවඳ සහ රස වෙනස් වෙන්නේ නෑ. පාරිභෝගික සේවාවත් ඉතා ඉහළයි. ඉඟුරු ඇඟටත් ගොඩක් ගුණ නිසා බය නැතුව පාවිච්චි කරන්න පුළුවන්.',
     avatar: 'NF',
     avatarBg: '#d8a5a5',
   },
@@ -78,7 +78,7 @@ export default function Reviews({ buyerType, language }) {
   const [newName, setNewName] = useState('')
   const [newRole, setNewRole] = useState('')
   const [newCountry, setNewCountry] = useState('🇱🇰')
-  const [newProduct, setNewProduct] = useState('Ceylon Cinnamon')
+  const [newProduct, setNewProduct] = useState('Ceylon Ginger — Premium Dried Root')
   const [newRating, setNewRating] = useState(5)
   const [newText, setNewText] = useState('')
 
@@ -175,7 +175,7 @@ export default function Reviews({ buyerType, language }) {
     setNewName('')
     setNewRole('')
     setNewCountry('🇱🇰')
-    setNewProduct('Ceylon Cinnamon')
+    setNewProduct('Ceylon Ginger — Premium Dried Root')
     setNewRating(5)
     setNewText('')
     setFormOpen(false)
@@ -319,11 +319,14 @@ export default function Reviews({ buyerType, language }) {
                 <div className="form-field-item">
                   <label>{t.productLabel}</label>
                   <select value={newProduct} onChange={(e) => setNewProduct(e.target.value)}>
-                    <option value="Ceylon Cinnamon — Alba Grade">Ceylon Cinnamon — Alba Grade</option>
-                    <option value="Ceylon Cinnamon — C5 Special">Ceylon Cinnamon — C5 Special</option>
-                    <option value="Ceylon Cinnamon — Quillings">Ceylon Cinnamon — Quillings</option>
-                    <option value="Ceylon Black Pepper — ASTA 570+">Ceylon Black Pepper — ASTA 570+</option>
-                    <option value="Ceylon White Pepper">Ceylon White Pepper</option>
+                    <option value="Ceylon Ginger — Premium Dried Root">Ceylon Ginger — Premium Dried Root</option>
+                    <option value="Ceylon Ginger — Organic Ginger Powder">Ceylon Ginger — Organic Ginger Powder</option>
+                    <option value="Ceylon Ginger — Ginger Essential Oil">Ceylon Ginger — Ginger Essential Oil</option>
+                    <option value="Ceylon Ginger — Fresh Green Ginger">Ceylon Ginger — Fresh Green Ginger</option>
+                    <option value="Hot Dragon Nai Miris — Fresh Cobra Pods">Hot Dragon Nai Miris — Fresh Cobra Pods</option>
+                    <option value="Hot Dragon Nai Miris — Dragon Fire Flakes">Hot Dragon Nai Miris — Dragon Fire Flakes</option>
+                    <option value="Hot Dragon Nai Miris — Cobra Chili Powder">Hot Dragon Nai Miris — Cobra Chili Powder</option>
+                    <option value="Hot Dragon Nai Miris — Dragon Sauce Base">Hot Dragon Nai Miris — Dragon Sauce Base</option>
                   </select>
                 </div>
               </div>

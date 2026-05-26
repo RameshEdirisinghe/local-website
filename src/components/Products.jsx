@@ -1,99 +1,99 @@
 import { useState } from 'react'
 import './Products.css'
-import cinnamonProduct from '../assets/images/cinnamon_product.png'
-import pepperProduct from '../assets/images/pepper_product.png'
+import gingerProduct from '../assets/images/ginger_product.png'
+import naimirisProduct from '../assets/images/naimiris_product.png'
 
 const PRODUCTS_DATA = [
   {
-    id: 'cinnamon',
-    name: 'Ceylon Cinnamon',
-    sinhala: 'කුරුඳු',
-    tagline: 'True Cinnamon — Soft, Sweet & Complex',
+    id: 'ginger',
+    name: 'Ceylon Ginger',
+    sinhala: 'ඉඟුරු',
+    tagline: 'Zesty, Warm & Intensely Aromatic',
     description: {
-      EN: 'Known as the "true cinnamon," Ceylon cinnamon (Cinnamomum verum) is native to Sri Lanka. Extremely low in coumarin (unlike Cassia), making it safe for daily consumption. It features thin, paper-like golden layers rolled together, giving a sweet, delicate aroma.',
-      SI: 'ලොව සැබෑ කුරුඳු (Cinnamomum verum) ශ්‍රී ලංකාවට ආවේණික වේ. කැසියා මෙන් නොව මෙහි කූමරින් ප්‍රතිශතය ඉතා අවම නිසා දිනපතා භාවිතයට ඉතා සුදුසුය. සිහින් ස්ථර රැසක් එක්ව සාදා ඇති මෙම කුරුඳු පොතු මිහිරි, සුවඳවත් රසයකින් යුක්ත වේ.'
+      EN: 'Ceylon Ginger (Zingiber officinale) is renowned for its high fiber content and intense gingerol concentration, delivering a sharper, sweeter, and more pungent kick than mass-produced Chinese ginger. Grown organically in wet-zone forest gardens, it is a staple in wellness remedies and culinary masterpieces alike.',
+      SI: 'ශ්‍රී ලංකාවට ආවේණික දේශීය ඉඟුරු (Zingiber officinale) එහි ඇති ඉහළ කෙඳි ප්‍රමාණය සහ අධික ජින්ජරෝල් ප්‍රතිශතය හේතුවෙන් සුවිශේෂී ප්‍රබල සැරකින් සහ සුවඳකින් යුක්ත වේ. දේශීය වෙදකමට මෙන්ම ආහාර රසවත් කිරීමටද බහුලව භාවිත කෙරේ.'
     },
-    image: cinnamonProduct,
-    color: 'var(--clr-cinnamon)',
+    image: gingerProduct,
+    color: 'var(--clr-ginger)',
     grades: [
       { 
-        name: 'Alba', 
+        name: 'Premium Dried Root', 
         desc: {
-          EN: 'The absolute premium grade. The thinnest quills, hand-rolled with extreme precision. Floral aroma, sweet taste, prized by top gourmet pastry chefs worldwide.',
-          SI: 'ඉහළම සහ වටිනාම කුරුඳු ශ්‍රේණිය. ඉතාමත් සිහින්ව අතින් සකස් කරන ලද, ලොව සුපිරි හෝටල් සහ රසකැවිලි නිෂ්පාදනයට බහුලවම යොදාගන්නා වර්ගයයි.'
+          EN: 'Premium dried whole ginger roots. Carefully washed, sun-dried, and hand-sorted. Highly concentrated flavor, ideal for brewing and culinary applications.',
+          SI: 'ප්‍රමිතියෙන් උසස් වියළි ඉඟුරු අල. හොඳින් සෝදා, අව්වේ වියළා පිරිසිදු කර ඇති අතර, තේ සහ ආහාර රසවත් කිරීමට කදිම වේ.'
         }, 
-        basePriceUSD: 25 
+        basePriceUSD: 16 
       },
       { 
-        name: 'C5 Special', 
+        name: 'Organic Ginger Powder', 
         desc: {
-          EN: 'Exquisite retail grade. Golden color, compact quills, perfect for packaging, gifting, and premium spice shops.',
-          SI: 'සුවිශේෂී සිල්ලර වෙළඳපල ශ්‍රේණිය. රන්වන් පැහැයෙන් යුතු අතර, තෑගි දීමට සහ උසස් තත්ත්වයේ කුළුබඩු සැකසුම් සඳහා කදිම වේ.'
+          EN: 'Finely milled from select organic ginger. Sharp, warming spice with no additives. Perfect for baking, smoothies, and herbal tea blends.',
+          SI: 'උසස්ම තත්ත්වයේ කාබනික ඉඟුරු කුඩු. කිසිදු රසායනික ද්‍රව්‍යයක් අඩංගු නොවන අතර, රසකැවිලි සහ ඖෂධීය පාන වර්ග සඳහා සෑදීමට සුදුසුය.'
         }, 
-        basePriceUSD: 20 
+        basePriceUSD: 12 
       },
       { 
-        name: 'C5 / M5', 
+        name: 'Ginger Essential Oil', 
         desc: {
-          EN: 'Standard export grade. Great combination of aroma and look. Excellent for culinary use and bulk blenders.',
-          SI: 'සාමාන්‍ය අපනයන මට්ටමේ ශ්‍රේණිය. සුවඳ සහ පෙනුම අතින් ඉතා උසස් වන අතර, ආහාර පිසීමට සහ කුළුබඩු මිශ්‍රණ සැකසීමට යොදාගනී.'
+          EN: 'Pure steam-distilled ginger root essential oil. Rich in bioactive gingerols. Heavily used in aroma therapies, cosmetics, and wellness supplements.',
+          SI: 'හුමාල ආසවනයෙන් නිස්සාරණය කරන ලද 100% පිරිසිදු ඉඟුරු තෙල්. ආලේපන සහ සුවඳ විලවුන් නිෂ්පාදනය සඳහා බහුලව යොදාගනී.'
         }, 
-        basePriceUSD: 15 
+        basePriceUSD: 35 
       },
       { 
-        name: 'Quillings', 
+        name: 'Fresh Green Ginger', 
         desc: {
-          EN: 'Broken cinnamon pieces. Concentrated oils. Highly cost-effective for grinding into powder or extracting essential oils.',
-          SI: 'කුඩු සහ තෙල් නිස්සාරණයට යොදාගන්නා, කැඩුණු කුරුඳු කැබලි. මිල අතින් ඉතා වාසිදායක වන අතර ගුණාත්මක බවින් ඉහළය.'
+          EN: 'Freshly harvested local ginger rhizomes. Juicy, fibrous, and packed with zesty flavor. Best for immediate kitchen prep and juice extracts.',
+          SI: 'අලුතින්ම නෙලාගත් නැවුම් අමු ඉඟුරු. යුෂ පිරුණු, ප්‍රබල සැර සහ ගුණාත්මක බවින් ඉහළම දේශීය ඉඟුරු වේ.'
         }, 
-        basePriceUSD: 8 
+        basePriceUSD: 6 
       },
     ],
     certifications: ['USDA Organic', 'SLS Certified', 'ISO 22000'],
   },
   {
-    id: 'pepper',
-    name: 'Ceylon Black Pepper',
-    sinhala: 'ගම්මිරිස්',
-    tagline: 'Bold, Pungent & Richly Aromatic',
+    id: 'naimiris',
+    name: 'Hot Dragon Nai Miris',
+    sinhala: 'නයි මිරිස්',
+    tagline: 'Fierce Cobra Heat & Exotic Fruity Aroma',
     description: {
-      EN: 'Sri Lankan black pepper contains double the piperine compared to other origins, delivering sharp, clean heat. Grown in organic mid-country home gardens and harvested at perfect maturity for maximum essential oils.',
-      SI: 'ශ්‍රී ලංකාවේ ගම්මිරිස්වල අඩංගු ඉහළ පයිපරීන් ප්‍රතිශතය නිසා ප්‍රබල සැර සහ සුවඳක් ගෙනදෙයි. ස්වාභාවික වගාවන්ගෙන් නෙලාගෙන නිසි ලෙස වියළා සකස් කර ඇත.'
+      EN: 'Known as the "Cobra Chilli" (Capsicum chinense), Sri Lankan Nai Miris delivers a legendary slow-burning sting ranging between 100,000 and 350,000+ SHU. Beyond its fiery heat, it carries a signature sweet, fruity aroma that makes it irreplaceable in authentic island sambols and hot sauces.',
+      SI: 'ශ්‍රී ලංකාවේ වඩාත්ම සැරැති මිරිස් වර්ගයක් වන නයි මිරිස් (Capsicum chinense) එහි ඇති සුවිශේෂී පළතුරු සුවඳ සහ දිව දවනා සැර (Scoville Heat: 100,000 - 350,000+) නිසා ලොව පුරා ප්‍රසිද්ධය. මෙය සාම්ප්‍රදායික සම්බෝල සහ සැර සෝස් වර්ග සඳහා අත්‍යවශ්‍ය වේ.'
     },
-    image: pepperProduct,
-    color: 'var(--clr-pepper)',
+    image: naimirisProduct,
+    color: 'var(--clr-naimiris)',
     grades: [
       { 
-        name: 'ASTA 570+', 
+        name: 'Fresh Cobra Pods', 
         desc: {
-          EN: 'Supreme export grade. Heavy, dense corns, fully sorted and cleaned. Highest piperine content and rich pungency.',
-          SI: 'උසස්ම අපනයන ශ්‍රේණිය. පිරිසිදු කරන ලද, බරින් සහ සැරෙන් වැඩිම ගම්මිරිස් ඇට වර්ගයයි.'
+          EN: 'Hand-picked ripe red Nai Miris pods. Extremely hot, juicy, and packed with fruity aroma. Shipped under cold chain to preserve freshness.',
+          SI: 'නැවුම්ව අතින් නෙලාගත් රතු පැහැති නයි මිරිස් කරල්. ඉතා සැර වන අතර නැවුම් බව සුරක්ෂිත වන සේ ඇසුරුම් කර ඇත.'
+        }, 
+        basePriceUSD: 24 
+      },
+      { 
+        name: 'Dragon Fire Flakes', 
+        desc: {
+          EN: 'Coarsely crushed sun-dried red chilies. Adds a high-impact heat and deep aroma to pizza, curries, and dry rubs.',
+          SI: 'වියළන ලද නයි මිරිස් කෑලි. ඕනෑම ආහාරයකට ඉහළ සැරක් සහ රසයක් එක් කර ගැනීම සඳහා කදිම වේ.'
         }, 
         basePriceUSD: 18 
       },
       { 
-        name: 'FAQ Grade', 
+        name: 'Cobra Chili Powder', 
         desc: {
-          EN: 'Fair Average Quality. Standard export pepper, widely used in industrial food service and general retail packaging.',
-          SI: 'සාමාන්‍ය අපනයන මට්ටම. ආහාර කර්මාන්තයේදී සහ සාමාන්‍ය පරිභෝජනය සඳහා බහුලවම යොදාගනී.'
+          EN: 'Pure ground red Nai Miris. Fine texture, fiery orange-red color. Extremely potent — handle with care.',
+          SI: 'වියළා අඹරන ලද පිරිසිදු නයි මිරිස් කුඩු. අධික සැරකින් යුක්ත වන බැවින් භාවිතයේදී ප්‍රවේශම් වන්න.'
         }, 
-        basePriceUSD: 12 
+        basePriceUSD: 14 
       },
       { 
-        name: 'White Pepper', 
+        name: 'Dragon Sauce Base', 
         desc: {
-          EN: 'Fully ripened peppercorns with the outer skin removed. Delicate, creamy flavor, perfect for light-colored sauces.',
-          SI: 'ලෙල්ල ඉවත් කරන ලද සම්පූර්ණයෙන්ම ඉදුණු ගම්මිරිස් ඇට. මෘදු සැරකින් යුක්ත වන අතර සුදු පැහැති සෝස් වර්ග සඳහා යොදාගනී.'
+          EN: 'Concentrated mash of red Nai Miris and organic sea salt. The perfect high-heat ingredient for artisanal hot sauce manufacturers.',
+          SI: 'නයි මිරිස් සහ කාබනික මුහුදු ලුණු මිශ්‍ර කර සාදන ලද පේස්ට් වර්ගයක්. සැර සෝස් වර්ග නිෂ්පාදනය සඳහා කදිම අමුද්‍රව්‍යයකි.'
         }, 
-        basePriceUSD: 22 
-      },
-      { 
-        name: 'Ground Black Pepper', 
-        desc: {
-          EN: 'Freshly milled to order. Medium coarse or fine grind, capturing the volatile oils in an airtight package.',
-          SI: 'ඇණවුම පරිදි අලුතින්ම අඹරා සකස් කර දෙනු ලැබේ. සුවඳ සහ රසය ආරක්ෂා වන පරිදි ඇසුරුම් කර ඇත.'
-        }, 
-        basePriceUSD: 10 
+        basePriceUSD: 20 
       },
     ],
     certifications: ['Organic Cert', 'HACCP', 'GMP Approved'],
@@ -101,8 +101,8 @@ const PRODUCTS_DATA = [
 ]
 
 export default function Products({ buyerType, currency, language, addToCart }) {
-  const [activeGradeIndex, setActiveGradeIndex] = useState({ cinnamon: 0, pepper: 0 })
-  const [quantities, setQuantities] = useState({ cinnamon: 10, pepper: 10 }) // Default starting quantities in kg/Rs
+  const [activeGradeIndex, setActiveGradeIndex] = useState({ ginger: 0, naimiris: 0 })
+  const [quantities, setQuantities] = useState({ ginger: 10, naimiris: 10 }) // Default starting quantities in kg/Rs
 
   // Currency factors relative to USD
   const currencySymbol = {
@@ -187,7 +187,7 @@ export default function Products({ buyerType, currency, language, addToCart }) {
             <article key={p.id} className="product-card-luxury" style={{ '--accent-color': p.color }}>
               <div className="product-card-visual">
                 <img src={p.image} alt={p.name} className="product-card-img" />
-                <div className="product-badge-overlay">{p.name === 'Ceylon Cinnamon' ? '100% True Cinnamon' : 'ASTA Quality'}</div>
+                <div className="product-badge-overlay">{p.name === 'Ceylon Ginger' ? '100% True Ginger' : 'Dragon Heat Level'}</div>
               </div>
 
               <div className="product-card-details">

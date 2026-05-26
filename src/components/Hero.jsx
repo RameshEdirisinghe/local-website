@@ -10,7 +10,7 @@ export default function Hero({ buyerType, language }) {
       titleItalic: "Purest",
       titlePost: "Ceylon Spices",
       subtitle:
-        "Hand-harvested cinnamon & black pepper from the lush highlands of Sri Lanka — shipped fresh to your door, anywhere on earth.",
+        "Hand-harvested ginger & hot dragon nai miris from the lush highlands of Sri Lanka — shipped fresh to your door, anywhere on earth.",
       badgeOrganic: "100% Organic",
       badgeCertified: "Export Certified",
       btnProducts: "Explore Products",
@@ -26,7 +26,7 @@ export default function Hero({ buyerType, language }) {
       titleItalic: "පිරිසිදුම",
       titlePost: "සෙලෝන් කුළුබඩු",
       subtitle:
-        "ශ්‍රී ලංකාවේ සාරවත් කඳුකරයෙන් නෙලාගත් සැබෑ කුරුඳු සහ ගම්මිරිස් - ලොව ඕනෑම තැනකට ඔබේ නිවසටම නැවුම්ව ගෙන්වා ගන්න.",
+        "ශ්‍රී ලංකාවේ සාරවත් කඳුකරයෙන් නෙලාගත් නැවුම් ඉඟුරු සහ සැර නයි මිරිස් - ලොව ඕනෑම තැනකට ඔබේ නිවසටම නැවුම්ව ගෙන්වා ගන්න.",
       badgeOrganic: "100% කාබනික",
       badgeCertified: "අපනයන සහතික",
       btnProducts: "නිෂ්පාදන බලන්න",
