@@ -8,6 +8,8 @@ import marketGallery from '../assets/images/market_gallery.png'
 import gingerProduct from '../assets/images/ginger_product.png'
 import naimirisProduct from '../assets/images/naimiris_product.png'
 import plantationHero from '../assets/images/plantation_hero.png'
+import greenMirisPremium from '../assets/images/green_miris_premium.png'
+import naimirisPremium from '../assets/images/naimiris_premium.png'
 
 const GALLERY_IMAGES = [
   {
@@ -19,9 +21,9 @@ const GALLERY_IMAGES = [
   },
   {
     id: 2,
-    url: matDryingGallery,
-    title: { EN: 'Sun Drying Spices', SI: 'අව්වේ වියළන කුළුබඩු' },
-    desc: { EN: 'Nai miris and ginger drying naturally under the tropical sun.', SI: 'නිවර්තන සූර්ය රශ්මියෙන් ස්වාභාවිකව වියළන ඉඟුරු සහ නයි මිරිස්.' },
+    url: greenMirisPremium,
+    title: { EN: 'Vibrant Green Miris', SI: 'නැවුම් අමු මිරිස්' },
+    desc: { EN: 'Freshly harvested Ceylon green chili, packed with tropical flavor.', SI: 'නැවුම්ව නෙළාගත් ලංකා අමු මිරිස්, නිවර්තන රසයෙන් පිරී ඇත.' },
     aspect: 'square-big'
   },
   {
@@ -47,9 +49,9 @@ const GALLERY_IMAGES = [
   },
   {
     id: 6,
-    url: naimirisProduct,
+    url: naimirisPremium,
     title: { EN: 'Hot Dragon Nai Miris', SI: 'සැර නයි මිරිස්' },
-    desc: { EN: 'Fresh cobra pods packed with fiery flavor and aroma.', SI: 'ඉහළම සැර සහ සුවඳ ගෙනදෙන නැවුම් නයි මිරිස් කරල්.' },
+    desc: { EN: 'Premium export-quality Sri Lankan Habanero pods packed with intense fiery flavor.', SI: 'ඉහළම සැර සහ සුවඳ ගෙනදෙන අපනයන මට්ටමේ නැවුම් නයි මිරිස් කරල්.' },
     aspect: 'portrait-medium'
   }
 ]

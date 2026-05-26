@@ -11,22 +11,41 @@ export default function Navbar({
   setLanguage,
   cartCount,
   toggleCart,
+  currentPage,
+  setCurrentPage,
 }) {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40)
+    const onScroll = () => setScrolled(currentPage !== 'home' || window.scrollY > 40)
     window.addEventListener('scroll', onScroll)
+    onScroll()
     return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+  }, [currentPage])
+
+  const handleNavClick = (page, hash = '') => {
+    setCurrentPage(page)
+    setMenuOpen(false)
+    if (hash && page === 'home') {
+      setTimeout(() => {
+        const el = document.getElementById(hash.replace('#', ''))
+        if (el) el.scrollIntoView({ behavior: 'smooth' })
+      }, 100)
+    } else if (page !== 'home') {
+      window.scrollTo(0, 0)
+    }
+  }
 
   // Translation sets
   const t = {
     EN: {
+      home: 'Home',
       products: 'Products',
       story: 'Our Story',
       reviews: 'Reviews',
+      specs: 'Technical Specs',
+      company: 'Our Company',
       localBuyer: 'Local Buyer',
       foreignBuyer: 'Eng',
       cart: 'Cart',
@@ -34,9 +53,12 @@ export default function Navbar({
       currency: 'Currency',
     },
     SI: {
+      home: 'මුල් පිටුව',
       products: 'නිෂ්පාදන',
       story: 'අපේ කතාව',
       reviews: 'පාරිභෝගික අදහස්',
+      specs: 'තාක්ෂණික පිරිවිතර',
+      company: 'අපේ සමාගම',
       localBuyer: 'සිංහල',
       foreignBuyer: 'අපනයන / විදේශීය',
       cart: 'කරත්තය',
@@ -49,7 +71,7 @@ export default function Navbar({
     <header className={`navbar-header ${scrolled ? 'navbar-header--scrolled' : ''}`}>
       <div className="container navbar-container">
         {/* Brand Logo */}
-        <a href="#hero" className="navbar-logo">
+        <a href="#hero" className="navbar-logo" onClick={(e) => { e.preventDefault(); handleNavClick('home', '#hero'); }}>
           <span className="navbar-logo__icon">🌿</span>
           <div className="navbar-logo__text">
             <span className="brand-main">Ceylon Spice</span>
@@ -59,14 +81,17 @@ export default function Navbar({
 
         {/* Navigation Links & Mobile Drawer */}
         <nav className={`navbar-nav ${menuOpen ? 'navbar-nav--open' : ''}`}>
-          <a href="#products" className="nav-link" onClick={() => setMenuOpen(false)}>
+          <a href="#products" className={`nav-link ${currentPage === 'home' ? '' : ''}`} onClick={(e) => { e.preventDefault(); handleNavClick('home', '#products'); }}>
             {t.products}
           </a>
-          <a href="#about" className="nav-link" onClick={() => setMenuOpen(false)}>
+          <a href="#about" className="nav-link" onClick={(e) => { e.preventDefault(); handleNavClick('home', '#about'); }}>
             {t.story}
           </a>
-          <a href="#reviews" className="nav-link" onClick={() => setMenuOpen(false)}>
-            {t.reviews}
+          <a href="#product-details" className={`nav-link ${currentPage === 'product-details' ? 'active' : ''}`} onClick={(e) => { e.preventDefault(); handleNavClick('product-details'); }}>
+            {t.specs}
+          </a>
+          <a href="#about-company" className={`nav-link ${currentPage === 'about-company' ? 'active' : ''}`} onClick={(e) => { e.preventDefault(); handleNavClick('about-company'); }}>
+            {t.company}
           </a>
 
           {/* Mobile selectors inside drawer */}

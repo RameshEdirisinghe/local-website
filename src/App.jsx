@@ -8,8 +8,11 @@ import Reviews from './components/Reviews'
 import Footer from './components/Footer'
 import Cart from './components/Cart'
 import CheckoutModal from './components/CheckoutModal'
+import ProductDetails from './pages/ProductDetails'
+import AboutCompany from './pages/AboutCompany'
 
 export default function App() {
+  const [currentPage, setCurrentPage] = useState('home') // 'home', 'product-details', 'about-company'
   const [buyerType, setBuyerType] = useState('foreign') // 'local' or 'foreign'
   const [currency, setCurrency] = useState('USD') // 'USD', 'LKR', 'EUR'
   const [language, setLanguage] = useState('EN') // 'EN' or 'SI' (Sinhala)
@@ -102,23 +105,31 @@ export default function App() {
         setLanguage={setLanguage}
         cartCount={cartCount}
         toggleCart={() => setCartOpen(true)}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
       />
       
       <main>
-        <Hero buyerType={buyerType} language={language} />
-        
-        <Products
-          buyerType={buyerType}
-          currency={currency}
-          language={language}
-          addToCart={addToCart}
-        />
-        
-        <About buyerType={buyerType} language={language} />
-        
-        <Gallery language={language} />
-        
-        <Reviews buyerType={buyerType} language={language} />
+        {currentPage === 'home' && (
+          <>
+            <Hero buyerType={buyerType} language={language} />
+            
+            <Products
+              buyerType={buyerType}
+              currency={currency}
+              language={language}
+              addToCart={addToCart}
+            />
+            
+            <About buyerType={buyerType} language={language} />
+            
+            <Gallery language={language} />
+            
+            <Reviews buyerType={buyerType} language={language} />
+          </>
+        )}
+        {currentPage === 'product-details' && <ProductDetails language={language} />}
+        {currentPage === 'about-company' && <AboutCompany language={language} />}
       </main>
       
       <Footer buyerType={buyerType} language={language} />
