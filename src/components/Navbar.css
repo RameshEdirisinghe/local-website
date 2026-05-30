@@ -35,9 +35,21 @@
   user-select: none;
 }
 
-.navbar-logo__icon {
-  font-size: 24px;
-  animation: float 5s ease-in-out infinite;
+.navbar-logo-img {
+  height: 38px;
+  width: 38px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 1.5px solid var(--clr-gold);
+  background: var(--clr-white);
+  padding: 2px;
+  box-shadow: 0 0 10px rgba(197, 157, 95, 0.3);
+  transition: transform var(--transition-smooth), box-shadow var(--transition-smooth);
+}
+
+.navbar-logo:hover .navbar-logo-img {
+  transform: scale(1.08) rotate(-5deg);
+  box-shadow: 0 0 15px rgba(197, 157, 95, 0.6);
 }
 
 .navbar-logo__text {

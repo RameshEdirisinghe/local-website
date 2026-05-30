@@ -148,7 +148,7 @@ export default function Gallery({ language }) {
         <p className="gallery-subtitle">{t.subtitle}</p>
 
         {/* Filter Navigation controls */}
-        <div className="gallery-filter-tabs glass">
+        {/* <div className="gallery-filter-tabs glass">
           <button 
             className={`filter-tab-btn ${filter === 'all' ? 'active' : ''}`}
             onClick={() => setFilter('all')}
@@ -167,7 +167,7 @@ export default function Gallery({ language }) {
           >
             {t.filterImage}
           </button>
-        </div>
+        </div> */}
       </div>
 
       {/* Infinite cinematic scrolling container */}

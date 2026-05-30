@@ -478,7 +478,7 @@ export default function CheckoutModal({
                           <span className="cvv-display-tag">{cardCvv || '•••'}</span>
                         </div>
                         <p className="card-legal-disclaimer">
-                          This is a fully simulated secure sandboxed card for Ceylon Spice Reserve web development.
+                          This is a fully simulated secure sandboxed card for Shorewin Agri web development.
                         </p>
                       </div>
                     </div>
@@ -665,7 +665,7 @@ export default function CheckoutModal({
                             <li><strong>Bank Name:</strong> Bank of Ceylon (BOC)</li>
                             <li><strong>Branch Name:</strong> Galle Fort Branch</li>
                             <li><strong>Account Number:</strong> 0087-2009-4112</li>
-                            <li><strong>Account Name:</strong> Ceylon Spice Reserve Estates</li>
+                            <li><strong>Account Name:</strong> Shorewin Agri Estates</li>
                             <li><strong>Wise Transfer Details:</strong> wise@ceylonspicereserve.lk</li>
                           </ul>
                         </div>

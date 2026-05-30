@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react'
 import { ShoppingBag, Globe, Menu, X } from 'lucide-react'
 import './Navbar.css'
 
+// Import company logo
+import companyLogo from '../assets/images/company_logo.jpeg'
+
 export default function Navbar({
   buyerType,
   setBuyerType,
@@ -72,9 +75,9 @@ export default function Navbar({
       <div className="container navbar-container">
         {/* Brand Logo */}
         <a href="#hero" className="navbar-logo" onClick={(e) => { e.preventDefault(); handleNavClick('home', '#hero'); }}>
-          <span className="navbar-logo__icon">🌿</span>
+          <img src={companyLogo} alt="Shorewin Agri Logo" className="navbar-logo-img" />
           <div className="navbar-logo__text">
-            <span className="brand-main">Ceylon Spice</span>
+            <span className="brand-main">Shorewin Agri</span>
             <span className="brand-sub">Reserve</span>
           </div>
         </a>

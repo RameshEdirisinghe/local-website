@@ -1,6 +1,9 @@
 import { Facebook, Instagram, Linkedin, Send } from 'lucide-react'
 import './Footer.css'
 
+// Import brand logo
+import companyLogo from '../assets/images/company_logo.jpeg'
+
 export default function Footer({ buyerType, language }) {
   const t = {
     EN: {
@@ -63,7 +66,12 @@ export default function Footer({ buyerType, language }) {
           
           {/* Brand Info */}
           <div className="footer-col-brand">
-            <div className="footer-brand-logo">🌿 Ceylon Spice <span>Reserve</span></div>
+            <div className="footer-brand-logo-container">
+              <img src={companyLogo} alt="Shorewin Agri Logo" className="footer-brand-logo-img" />
+              <div className="footer-brand-logo-text">
+                Shorewin <span>Agri</span>
+              </div>
+            </div>
             <p className="footer-tagline-text">{t.tagline}</p>
             <div className="footer-social-icons">
               <a href="#" className="social-icon" aria-label="Facebook"><Facebook size={16} /></a>
