@@ -74,6 +74,14 @@
   padding-bottom: 1rem;
 }
 
+.spec-card-title-generic {
+  font-family: var(--ff-display);
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(197, 157, 95, 0.2);
+  padding-bottom: 1rem;
+}
+
 .spec-card-desc {
   font-size: clamp(15px, 1.2vw, 17px);
   line-height: 1.7;

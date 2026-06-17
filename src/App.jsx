@@ -10,9 +10,11 @@ import Cart from './components/Cart'
 import CheckoutModal from './components/CheckoutModal'
 import ProductDetails from './pages/ProductDetails'
 import AboutCompany from './pages/AboutCompany'
+import AdminPanel from './pages/AdminPanel'
+import { DEFAULT_PRODUCTS } from './data/defaultProducts'
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState('home') // 'home', 'product-details', 'about-company'
+  const [currentPage, setCurrentPage] = useState('home') // 'home', 'product-details', 'about-company', 'admin'
   const [buyerType, setBuyerType] = useState('foreign') // 'local' or 'foreign'
   const [currency, setCurrency] = useState('USD') // 'USD', 'LKR', 'EUR'
   const [language, setLanguage] = useState('EN') // 'EN' or 'SI' (Sinhala)
@@ -20,6 +22,48 @@ export default function App() {
   const [cartOpen, setCartOpen] = useState(false)
   const [checkoutOpen, setCheckoutOpen] = useState(false)
   const [toasts, setToasts] = useState([])
+
+  // Load and store products state dynamically in localStorage
+  const [products, setProducts] = useState(() => {
+    const saved = localStorage.getItem('ceylon_spice_products')
+    return saved ? JSON.parse(saved) : DEFAULT_PRODUCTS
+  })
+
+  useEffect(() => {
+    localStorage.setItem('ceylon_spice_products', JSON.stringify(products))
+  }, [products])
+
+  // Simple location pathname-based client-side router
+  useEffect(() => {
+    const handleLocationChange = () => {
+      const path = window.location.pathname
+      if (path === '/admin') {
+        setCurrentPage('admin')
+      } else if (path === '/product-details') {
+        setCurrentPage('product-details')
+      } else if (path === '/about-company') {
+        setCurrentPage('about-company')
+      } else {
+        setCurrentPage('home')
+      }
+    }
+
+    window.addEventListener('popstate', handleLocationChange)
+    handleLocationChange()
+
+    return () => window.removeEventListener('popstate', handleLocationChange)
+  }, [])
+
+  useEffect(() => {
+    let path = '/'
+    if (currentPage === 'admin') path = '/admin'
+    else if (currentPage === 'product-details') path = '/product-details'
+    else if (currentPage === 'about-company') path = '/about-company'
+
+    if (window.location.pathname !== path) {
+      window.history.pushState(null, '', path)
+    }
+  }, [currentPage])
 
   // Adjust currency and language based on buyerType selection automatically
   useEffect(() => {
@@ -94,6 +138,26 @@ export default function App() {
 
   const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0)
 
+  if (currentPage === 'admin') {
+    return (
+      <>
+        <AdminPanel 
+          products={products} 
+          setProducts={setProducts} 
+          setCurrentPage={setCurrentPage} 
+        />
+        <div className="toast-container">
+          {toasts.map((t) => (
+            <div key={t.id} className="toast toast--success">
+              <span>🌿</span>
+              <span>{t.message}</span>
+            </div>
+          ))}
+        </div>
+      </>
+    )
+  }
+
   return (
     <>
       <Navbar
@@ -119,6 +183,7 @@ export default function App() {
               currency={currency}
               language={language}
               addToCart={addToCart}
+              products={products}
             />
             
             <About buyerType={buyerType} language={language} />
@@ -128,7 +193,7 @@ export default function App() {
             <Reviews buyerType={buyerType} language={language} />
           </>
         )}
-        {currentPage === 'product-details' && <ProductDetails language={language} />}
+        {currentPage === 'product-details' && <ProductDetails language={language} products={products} />}
         {currentPage === 'about-company' && <AboutCompany language={language} />}
       </main>
       

@@ -49,6 +49,7 @@ export default function Navbar({
       reviews: 'Reviews',
       specs: 'Technical Specs',
       company: 'Our Company',
+      admin: 'Admin',
       localBuyer: 'Local Buyer',
       foreignBuyer: 'Eng',
       cart: 'Cart',
@@ -62,6 +63,7 @@ export default function Navbar({
       reviews: 'පාරිභෝගික අදහස්',
       specs: 'තාක්ෂණික පිරිවිතර',
       company: 'අපේ සමාගම',
+      admin: 'කළමනාකරු',
       localBuyer: 'සිංහල',
       foreignBuyer: 'අපනයන / විදේශීය',
       cart: 'කරත්තය',
@@ -95,6 +97,9 @@ export default function Navbar({
           </a>
           <a href="#about-company" className={`nav-link ${currentPage === 'about-company' ? 'active' : ''}`} onClick={(e) => { e.preventDefault(); handleNavClick('about-company'); }}>
             {t.company}
+          </a>
+          <a href="/admin" className={`nav-link ${currentPage === 'admin' ? 'active' : ''}`} onClick={(e) => { e.preventDefault(); handleNavClick('admin'); }}>
+            {t.admin}
           </a>
 
           {/* Mobile selectors inside drawer */}
