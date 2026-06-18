@@ -236,32 +236,19 @@ export default function AdminPanel({ products, setProducts, setCurrentPage }) {
   }
 
   const addSpecField = () => {
-    setFormSpecs([...formSpecs, { 
-      label: { EN: '', SI: '' }, 
-      value: { EN: '', SI: '' } 
-    }])
-  }
-
-  const removeSpecField = (index) => {
-    setFormSpecs(formSpecs.filter((_, i) => i !== index))
-  }
+    setFormSpecs([...formSpecs, { label: { EN: '', SI: '' }, value: { EN: '', SI: '' } }]);
+  };
 
   // Save/Submit Form
-  const handleSaveProduct = (e) => {
-    e.preventDefault()
+  const handleSaveProduct = async (e) => {
+    e.preventDefault();
 
     if (!formId || !formName) {
-      alert('Product ID and Name are required!')
-      return
+      alert('Product ID and Name are required!');
+      return;
     }
 
-    const cleanedId = formId.toLowerCase().replace(/[^a-z0-9_-]/g, '')
-
-    // Validate if adding and ID already exists
-    if (!editingProduct && products.some(p => p.id === cleanedId)) {
-      alert(`Product ID "${cleanedId}" already exists! Please use a unique ID.`)
-      return
-    }
+    const cleanedId = formId.toLowerCase().replace(/[^a-z0-9_-]/g, '');
 
     const newProduct = {
       id: cleanedId,
@@ -270,49 +257,58 @@ export default function AdminPanel({ products, setProducts, setCurrentPage }) {
       tagline: formTagline,
       description: {
         EN: formDescEn,
-        SI: formDescSi
+        SI: formDescSi,
       },
-      image: formImage || 'https://images.unsplash.com/photo-1596797038530-2c107229654b?q=80&w=300&auto=format&fit=crop', // default photo
+      image: formImage || '', // backend will fill default if empty
       color: formColor,
       grades: formGrades.map(g => ({
-        name: g.name || 'Standard Grade',
-        desc: {
-          EN: g.desc?.EN || '',
-          SI: g.desc?.SI || ''
-        },
-        basePriceUSD: g.basePriceUSD || 10
+        name: g.name,
+        desc: { EN: g.desc?.EN || '', SI: g.desc?.SI || '' },
+        basePriceUSD: g.basePriceUSD || 10,
       })),
       certifications: formCerts,
       active: editingProduct ? editingProduct.active : true,
       pitch: {
-        title: {
-          EN: formPitchTitleEn,
-          SI: formPitchTitleSi
-        },
-        text: {
-          EN: formPitchTextEn,
-          SI: formPitchTextSi
-        }
+        title: { EN: formPitchTitleEn, SI: formPitchTitleSi },
+        text: { EN: formPitchTextEn, SI: formPitchTextSi },
       },
       specifications: formSpecs.map(s => ({
         label: { EN: s.label?.EN || '', SI: s.label?.SI || '' },
-        value: { EN: s.value?.EN || '', SI: s.value?.SI || '' }
-      }))
-    }
+        value: { EN: s.value?.EN || '', SI: s.value?.SI || '' },
+      })),
+    };
 
-    let updatedProducts
-    if (editingProduct) {
-      updatedProducts = products.map(p => p.id === editingProduct.id ? newProduct : p)
-      addActivityLog(`Product "${formName}" details updated.`)
-    } else {
-      updatedProducts = [...products, newProduct]
-      addActivityLog(`New product "${formName}" created.`)
+    try {
+      const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+      const endpoint = editingProduct
+        ? `${baseUrl}/api/products/${editingProduct.id}`
+        : `${baseUrl}/api/products`;
+      const method = editingProduct ? 'PUT' : 'POST';
+      const res = await fetch(endpoint, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newProduct),
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || 'Failed to save product');
+      }
+      // Refresh product list
+      const allRes = await fetch(`${baseUrl}/api/products`);
+      const fresh = await allRes.json();
+      setProducts(fresh);
+      addActivityLog(
+        editingProduct
+          ? `Product "${formName}" details updated.`
+          : `New product "${formName}" created.`
+      );
+      setActiveTab('manage');
+      setEditingProduct(null);
+    } catch (e) {
+      console.error(e);
+      alert(e.message);
     }
-
-    setProducts(updatedProducts)
-    setActiveTab('manage')
-    setEditingProduct(null)
-  }
+  };
 
   // Render Login view if not logged in
   if (!isAuthenticated) {

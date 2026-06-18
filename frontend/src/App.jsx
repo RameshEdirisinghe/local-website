@@ -23,15 +23,25 @@ export default function App() {
   const [checkoutOpen, setCheckoutOpen] = useState(false)
   const [toasts, setToasts] = useState([])
 
-  // Load and store products state dynamically in localStorage
-  const [products, setProducts] = useState(() => {
-    const saved = localStorage.getItem('ceylon_spice_products')
-    return saved ? JSON.parse(saved) : DEFAULT_PRODUCTS
-  })
+  // Initialize empty products list – will be populated from backend API
+  const [products, setProducts] = useState([]);
 
+  // Load products from the backend on mount
   useEffect(() => {
-    localStorage.setItem('ceylon_spice_products', JSON.stringify(products))
-  }, [products])
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/products`);
+        if (!res.ok) throw new Error('Failed to fetch products');
+        const data = await res.json();
+        setProducts(data);
+      } catch (err) {
+        console.error(err);
+        // Fallback to default products if backend is unreachable
+        setProducts(DEFAULT_PRODUCTS);
+      }
+    };
+    fetchProducts();
+  }, []);
 
   // Simple location pathname-based client-side router
   useEffect(() => {
