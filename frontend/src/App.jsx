@@ -118,7 +118,8 @@ export default function App() {
           quantity: qty,
           unit,
           price: unitPrice,
-          image: product.image,
+          image: product.image || product.imageUrl || '',
+          imageUrl: product.imageUrl || product.image || '',
         },
       ]
     })

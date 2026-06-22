@@ -96,7 +96,18 @@ export default function Products({ buyerType, currency, language, addToCart, pro
           return (
             <article key={p.id} className="product-card-luxury" style={{ '--accent-color': p.color }}>
               <div className="product-card-visual">
-                <img src={p.image} alt={p.name} className="product-card-img" />
+                <img
+                  src={p.image || p.imageUrl || ''}
+                  alt={p.name}
+                  className="product-card-img"
+                  onError={(e) => {
+                    e.target.onerror = null
+                    e.target.style.background = 'rgba(197,157,95,0.08)'
+                    e.target.style.objectFit = 'contain'
+                    e.target.style.padding = '16px'
+                    e.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%23c59d5f" stroke-width="1.5"%3E%3Crect x="3" y="3" width="18" height="18" rx="2"/%3E%3Ccircle cx="8.5" cy="8.5" r="1.5"/%3E%3Cpath d="M21 15l-5-5L5 21"/%3E%3C/svg%3E'
+                  }}
+                />
                 <div className="product-badge-overlay">
                   {p.name.toLowerCase().includes('ginger') ? '100% True Ginger' : (p.name.toLowerCase().includes('miris') ? 'Dragon Heat Level' : 'Premium Reserve')}
                 </div>

@@ -9,7 +9,8 @@ const ProductSchema = new mongoose.Schema({
     EN: { type: String },
     SI: { type: String }
   },
-  image: { type: String }, // Supabase public URL
+  image: { type: String },    // Supabase public URL (primary)
+  imageUrl: { type: String }, // Supabase public URL (alias / redundant — kept in sync with image)
   color: { type: String },
   grades: [
     {

@@ -1,6 +1,8 @@
 const Joi = require('joi');
 
 const productSchema = Joi.object({
+  _id: Joi.any(),
+  __v: Joi.any(),
   id: Joi.string().regex(/^[a-z0-9_-]+$/).required(),
   name: Joi.string().required(),
   sinhala: Joi.string().allow(''),
@@ -9,10 +11,12 @@ const productSchema = Joi.object({
     EN: Joi.string().allow(''),
     SI: Joi.string().allow(''),
   }).required(),
-  image: Joi.string().uri().allow(''), // can be Base64, will be processed
+  image: Joi.string().allow(''), // can be Base64 data URL
+  imageUrl: Joi.string().allow(''), // Supabase public URL
   color: Joi.string().allow(''),
   grades: Joi.array().items(
     Joi.object({
+      _id: Joi.any(),
       name: Joi.string().allow(''),
       desc: Joi.object({ EN: Joi.string().allow(''), SI: Joi.string().allow('') }).allow(null),
       basePriceUSD: Joi.number().min(0).allow(null),
@@ -26,6 +30,7 @@ const productSchema = Joi.object({
   }),
   specifications: Joi.array().items(
     Joi.object({
+      _id: Joi.any(),
       label: Joi.object({ EN: Joi.string().allow(''), SI: Joi.string().allow('') }).allow(null),
       value: Joi.object({ EN: Joi.string().allow(''), SI: Joi.string().allow('') }).allow(null),
     })
@@ -33,3 +38,4 @@ const productSchema = Joi.object({
 });
 
 module.exports = { productSchema };
+

@@ -51,7 +51,14 @@ export default function Cart({
               {cart.map((item) => (
                 <div key={item.key} className="cart-item-card">
                   <div className="cart-item-img-container">
-                    <img src={item.image} alt={item.name} />
+                    <img
+                      src={item.image || item.imageUrl || ''}
+                      alt={item.name}
+                      onError={(e) => {
+                        e.target.onerror = null
+                        e.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%23c59d5f" stroke-width="1.5"%3E%3Crect x="3" y="3" width="18" height="18" rx="2"/%3E%3Ccircle cx="8.5" cy="8.5" r="1.5"/%3E%3Cpath d="M21 15l-5-5L5 21"/%3E%3C/svg%3E'
+                      }}
+                    />
                   </div>
 
                   <div className="cart-item-info">

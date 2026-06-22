@@ -945,3 +945,80 @@
     text-align: right;
   }
 }
+
+/* --- SPINNER / LOADING STATES --- */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.spin-icon {
+  animation: spin 0.9s linear infinite;
+  flex-shrink: 0;
+}
+
+/* Disabled buttons get reduced opacity — don't remove pointer-events so title tooltip still works */
+.file-input-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn:disabled,
+.btn--gold:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: auto; /* keep tooltip visible */
+}
+
+/* --- IMAGE UPLOAD AREA: layout fix so status row appears below the buttons --- */
+.admin-image-upload-box {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Wrapper for Choose Image btn + hidden input. Must be relative so the absolute input overlays correctly. */
+.file-input-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  overflow: visible;
+  position: relative; /* keep relative so input[type=file] overlays the Choose Image btn */
+}
+
+.file-input-wrapper input[type=file] {
+  /* invisible overlay sits only on top of the first button (Choose Image) */
+  width: 140px;
+  height: 42px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+
+/* --- IMAGE UPLOAD STATUS BADGE --- */
+.image-upload-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  margin-top: 8px;
+  letter-spacing: 0.02em;
+}
+
+.image-upload-status--ok {
+  background: rgba(34, 120, 60, 0.15);
+  border: 1px solid rgba(34, 120, 60, 0.4);
+  color: #6ee79e;
+}
+
+.image-upload-status--warn {
+  background: rgba(197, 157, 95, 0.1);
+  border: 1px solid rgba(197, 157, 95, 0.35);
+  color: var(--clr-gold-light);
+}
+

@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import toast, { Toaster } from 'react-hot-toast'
 import { 
   LayoutDashboard, 
   ShoppingBag, 
@@ -13,10 +14,22 @@ import {
   DollarSign, 
   FileText, 
   Eye, 
-  Upload 
+  Upload,
+  Loader2
 } from 'lucide-react'
 import './AdminPanel.css'
 import companyLogo from '../assets/images/company_logo.jpeg'
+
+// Validate that a URL is a real Supabase Storage public URL (not localhost/blob/objectURL)
+const isValidSupabaseUrl = (url) => {
+  if (!url) return false
+  if (url.startsWith('blob:')) return false
+  if (url.startsWith('data:')) return false
+  if (url.includes('localhost')) return false
+  if (url.startsWith('http://127.')) return false
+  // Must be an https Supabase storage URL
+  return url.startsWith('https://') && url.includes('.supabase.co/storage/')
+}
 
 export default function AdminPanel({ products, setProducts, setCurrentPage }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -82,30 +95,63 @@ export default function AdminPanel({ products, setProducts, setCurrentPage }) {
     setPassword('')
   }
 
-  // Toggle active status
-  const handleToggleActive = (id) => {
-    const updated = products.map(p => {
-      if (p.id === id) {
-        const nextState = !p.active
-        addActivityLog(`Product "${p.name}" status changed to ${nextState ? 'ACTIVE' : 'INACTIVE'}.`)
-        return { ...p, active: nextState }
+  // Toggle active status — calls backend PUT, then refreshes from server
+  const handleToggleActive = async (id) => {
+    const product = products.find(p => p.id === id)
+    if (!product) return
+    const nextState = !product.active
+    const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
+    try {
+      const res = await fetch(`${baseUrl}/api/products/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...product, active: nextState }),
+      })
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}))
+        toast.error(`❌ Failed to update status: ${err.error || 'Unknown error'}`)
+        return
       }
-      return p
-    })
-    setProducts(updated)
+      // Refresh the full list from MongoDB
+      const allRes = await fetch(`${baseUrl}/api/products`)
+      const fresh = await allRes.json()
+      setProducts(fresh)
+      const label = nextState ? 'ACTIVE' : 'INACTIVE'
+      addActivityLog(`Product "${product.name}" status changed to ${label}.`)
+      toast.success(`✅ "${product.name}" is now ${label}.`)
+    } catch (e) {
+      console.error(e)
+      toast.error('❌ Network error while updating status.')
+    }
   }
 
-  // Delete product
-  const handleDeleteProduct = (id, name) => {
-    if (window.confirm(`Are you sure you want to delete "${name}"?`)) {
-      const updated = products.filter(p => p.id !== id)
-      setProducts(updated)
+  // Delete product — calls backend DELETE, then refreshes from server
+  const handleDeleteProduct = async (id, name) => {
+    if (!window.confirm(`Are you sure you want to delete "${name}"?`)) return
+    const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
+    try {
+      const res = await fetch(`${baseUrl}/api/products/${id}`, {
+        method: 'DELETE',
+      })
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}))
+        toast.error(`❌ Failed to delete: ${err.error || 'Unknown error'}`)
+        return
+      }
+      // Refresh the full list from MongoDB
+      const allRes = await fetch(`${baseUrl}/api/products`)
+      const fresh = await allRes.json()
+      setProducts(fresh)
       addActivityLog(`Product "${name}" deleted.`)
-      
-      // If we are currently editing the deleted product, reset form
+      toast.success(`✅ "${name}" deleted successfully.`)
+      // If currently editing the deleted product, go back to list
       if (editingProduct && editingProduct.id === id) {
         setEditingProduct(null)
+        setActiveTab('manage')
       }
+    } catch (e) {
+      console.error(e)
+      toast.error('❌ Network error while deleting product.')
     }
   }
 
@@ -117,8 +163,19 @@ export default function AdminPanel({ products, setProducts, setCurrentPage }) {
   const [formDescEn, setFormDescEn] = useState('')
   const [formDescSi, setFormDescSi] = useState('')
   const [formColor, setFormColor] = useState('var(--clr-ginger)')
-  const [formImage, setFormImage] = useState('')
+  const [formImage, setFormImage] = useState('')        // only ever holds a valid Supabase public URL
+  const [formImageFile, setFormImageFile] = useState(null) // raw File object from <input>
+  const [imageUploaded, setImageUploaded] = useState(false) // true only after a successful Supabase upload
+  const [imageSelected, setImageSelected] = useState(false)  // true when user has picked a NEW file
   const [formCerts, setFormCerts] = useState([])
+  const [imagePreviewUrl, setImagePreviewUrl] = useState('') // blob URL for preview only
+
+  // Loading / in-progress flags
+  const [isUploadingImage, setIsUploadingImage] = useState(false)
+  const [isSubmittingProduct, setIsSubmittingProduct] = useState(false)
+
+  // Ref for the hidden file input so we can reset it
+  const fileInputRef = useRef(null)
   const [formPitchTitleEn, setFormPitchTitleEn] = useState('')
   const [formPitchTitleSi, setFormPitchTitleSi] = useState('')
   const [formPitchTextEn, setFormPitchTextEn] = useState('')
@@ -137,9 +194,20 @@ export default function AdminPanel({ products, setProducts, setCurrentPage }) {
     setFormTagline(product.tagline || '')
     setFormDescEn(product.description?.EN || '')
     setFormDescSi(product.description?.SI || '')
+    // Resolve the best available Supabase URL from either image or imageUrl field
+    const rawUrl = product.image || product.imageUrl || ''
+    const existingUrl = isValidSupabaseUrl(rawUrl) ? rawUrl : ''
+    setFormImage(existingUrl)
+    setImagePreviewUrl(existingUrl)
     setFormColor(product.color || 'var(--clr-ginger)')
-    setFormImage(product.image || '')
     setFormCerts(product.certifications || [])
+    // For edit: image is considered "uploaded" if we have an existing valid URL and no new file selected
+    setImageUploaded(!!existingUrl)
+    setImageSelected(false)
+    setFormImageFile(null)
+    setIsUploadingImage(false)
+    setIsSubmittingProduct(false)
+    if (fileInputRef.current) fileInputRef.current.value = ''
     
     setFormPitchTitleEn(product.pitch?.title?.EN || '')
     setFormPitchTitleSi(product.pitch?.title?.SI || '')
@@ -163,6 +231,13 @@ export default function AdminPanel({ products, setProducts, setCurrentPage }) {
     setFormDescSi('')
     setFormColor('var(--clr-ginger)')
     setFormImage('')
+    setImagePreviewUrl('')
+    setFormImageFile(null)
+    setImageUploaded(false)
+    setImageSelected(false)
+    setIsUploadingImage(false)
+    setIsSubmittingProduct(false)
+    if (fileInputRef.current) fileInputRef.current.value = ''
     setFormCerts(['USDA Organic', 'SLS Certified'])
     
     setFormPitchTitleEn('')
@@ -180,16 +255,23 @@ export default function AdminPanel({ products, setProducts, setCurrentPage }) {
     setActiveTab('add-edit')
   }
 
-  // Handle Image upload to Base64
+  // Handle file selection — only sets local preview, does NOT upload yet
   const handleImageUpload = (e) => {
     const file = e.target.files[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setFormImage(reader.result)
-      }
-      reader.readAsDataURL(file)
+    if (!file) return
+    // Revoke any previous blob URL to avoid memory leaks
+    if (imagePreviewUrl && imagePreviewUrl.startsWith('blob:')) {
+      URL.revokeObjectURL(imagePreviewUrl)
     }
+    setFormImageFile(file)
+    setImageSelected(true)
+    // Clear any previously uploaded URL — the user must click "Store Image" again
+    setFormImage('')
+    setImageUploaded(false)
+    // Show blob preview
+    const previewUrl = URL.createObjectURL(file)
+    setImagePreviewUrl(previewUrl)
+    toast.success('✅ Image selected successfully.')
   }
 
   // Toggle certifications selection
@@ -239,16 +321,71 @@ export default function AdminPanel({ products, setProducts, setCurrentPage }) {
     setFormSpecs([...formSpecs, { label: { EN: '', SI: '' }, value: { EN: '', SI: '' } }]);
   };
 
-  // Save/Submit Form
+  // Upload the selected file to Supabase Storage via the backend
+  const handleStoreImage = async () => {
+    if (!formImageFile) {
+      toast.error('⚠️ Please select an image first.');
+      return;
+    }
+    if (isUploadingImage) return; // prevent duplicate clicks
+
+    setIsUploadingImage(true);
+    const toastId = toast.loading('⬆️ Uploading image...');
+    const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+    const formData = new FormData();
+    formData.append('file', formImageFile);
+    try {
+      const res = await fetch(`${baseUrl}/api/products/upload-image`, {
+        method: 'POST',
+        body: formData,
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        const msg = err.error || 'Image upload failed';
+        toast.error('❌ Image upload failed. Please try again.', { id: toastId });
+        throw new Error(msg);
+      }
+      const { url } = await res.json();
+      // Validate the URL returned is a proper Supabase public URL
+      if (!url || !isValidSupabaseUrl(url)) {
+        toast.error('❌ Invalid image URL returned. Please try again.', { id: toastId });
+        throw new Error('Invalid or missing Supabase public URL from server');
+      }
+      // Store ONLY the Supabase public URL; keep the blob URL for the visual preview
+      setFormImage(url);
+      setImageSelected(false); // a new file selection will re-enable Store Image
+      setImageUploaded(true);
+      toast.success('✅ Image uploaded successfully.', { id: toastId });
+      addActivityLog(`Image uploaded for product "${formName || formId}"`);
+    } catch (e) {
+      console.error(e);
+      setImageUploaded(false);
+      setFormImage('');
+      // toast already shown above if it's a known error; only show here if not
+    } finally {
+      setIsUploadingImage(false);
+    }
+  };
+
   const handleSaveProduct = async (e) => {
     e.preventDefault();
+    if (isSubmittingProduct) return; // prevent duplicate submits
 
-    if (!formId || !formName) {
-      alert('Product ID and Name are required!');
+    // — Final validation before sending —
+    if (!formId?.trim() || !formName?.trim()) {
+      toast.error('⚠️ Please fill all required fields.');
+      return;
+    }
+    if (!imageUploaded || !isValidSupabaseUrl(formImage)) {
+      toast.error('⚠️ Please upload the image before publishing.');
       return;
     }
 
+    setIsSubmittingProduct(true);
     const cleanedId = formId.toLowerCase().replace(/[^a-z0-9_-]/g, '');
+
+    // Only ever send the Supabase public URL — never blob or localhost
+    const safeImageUrl = isValidSupabaseUrl(formImage) ? formImage : '';
 
     const newProduct = {
       id: cleanedId,
@@ -259,7 +396,8 @@ export default function AdminPanel({ products, setProducts, setCurrentPage }) {
         EN: formDescEn,
         SI: formDescSi,
       },
-      image: formImage || '', // backend will fill default if empty
+      image: safeImageUrl,
+      imageUrl: safeImageUrl,
       color: formColor,
       grades: formGrades.map(g => ({
         name: g.name,
@@ -290,23 +428,31 @@ export default function AdminPanel({ products, setProducts, setCurrentPage }) {
         body: JSON.stringify(newProduct),
       });
       if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || 'Failed to save product');
+        const err = await res.json().catch(() => ({}));
+        const msg = err.error || (editingProduct ? 'Failed to update product.' : 'Failed to publish product.');
+        toast.error(`❌ ${msg}`);
+        throw new Error(msg);
       }
-      // Refresh product list
+      // Refresh product list from server
       const allRes = await fetch(`${baseUrl}/api/products`);
       const fresh = await allRes.json();
       setProducts(fresh);
-      addActivityLog(
-        editingProduct
-          ? `Product "${formName}" details updated.`
-          : `New product "${formName}" created.`
-      );
+      const successMsg = editingProduct
+        ? '✅ Product updated successfully.'
+        : '✅ Product published successfully.';
+      toast.success(successMsg);
+      addActivityLog(successMsg);
+      // Reset image-related state
+      if (imagePreviewUrl && imagePreviewUrl.startsWith('blob:')) {
+        URL.revokeObjectURL(imagePreviewUrl)
+      }
       setActiveTab('manage');
       setEditingProduct(null);
     } catch (e) {
       console.error(e);
-      alert(e.message);
+      // toast already shown above
+    } finally {
+      setIsSubmittingProduct(false);
     }
   };
 
@@ -391,6 +537,7 @@ export default function AdminPanel({ products, setProducts, setCurrentPage }) {
 
   return (
     <div className="admin-page-container">
+      <Toaster position="top-right" reverseOrder={false} />
       <div className="admin-dashboard-layout">
         
         {/* Sidebar Nav */}
@@ -561,7 +708,15 @@ export default function AdminPanel({ products, setProducts, setCurrentPage }) {
                         <tr key={p.id}>
                           <td>
                             <div className="product-row-info">
-                              <img src={p.image} alt={p.name} className="product-table-img" />
+                              <img
+                                src={p.image || p.imageUrl || ''}
+                                alt={p.name}
+                                className="product-table-img"
+                                onError={(e) => {
+                                  e.target.onerror = null
+                                  e.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%23c59d5f" stroke-width="1.5"%3E%3Crect x="3" y="3" width="18" height="18" rx="2"/%3E%3Ccircle cx="8.5" cy="8.5" r="1.5"/%3E%3Cpath d="M21 15l-5-5L5 21"/%3E%3C/svg%3E'
+                                }}
+                              />
                               <div className="product-row-names">
                                 <span className="product-row-name-en">{p.name}</span>
                                 <span className="product-row-name-si">{p.sinhala}</span>
@@ -751,8 +906,8 @@ export default function AdminPanel({ products, setProducts, setCurrentPage }) {
                       <label>Product Imagery</label>
                       <div className="admin-image-upload-box">
                         <div className="admin-image-preview">
-                          {formImage ? (
-                            <img src={formImage} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 'var(--radius-sm)' }} />
+                          {imagePreviewUrl ? (
+                            <img src={imagePreviewUrl} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 'var(--radius-sm)' }} />
                           ) : (
                             <div className="admin-image-placeholder">
                               <Upload size={20} />
@@ -765,11 +920,41 @@ export default function AdminPanel({ products, setProducts, setCurrentPage }) {
                             <Upload size={16} /> Choose Image
                           </button>
                           <input 
+                            ref={fileInputRef}
                             type="file" 
                             accept="image/*" 
                             onChange={handleImageUpload}
                           />
+                          <button
+                            type="button"
+                            className={`file-input-btn${isUploadingImage ? ' btn--loading' : ''}`}
+                            onClick={handleStoreImage}
+                            disabled={!imageSelected || isUploadingImage || imageUploaded}
+                            style={{ marginLeft: '8px' }}
+                            title={
+                              !imageSelected ? 'Select an image first'
+                              : imageUploaded ? 'Image already stored — select a new image to replace'
+                              : 'Upload selected image to Supabase'
+                            }
+                          >
+                            {isUploadingImage
+                              ? <><Loader2 size={16} className="spin-icon" /> Uploading...
+                              </>
+                              : <><Upload size={16} /> Store Image</>
+                            }
+                          </button>
                         </div>
+                        {/* Upload status indicator */}
+                        {imageUploaded && isValidSupabaseUrl(formImage) && (
+                          <div className="image-upload-status image-upload-status--ok">
+                            <Check size={14} /> Image stored in Supabase
+                          </div>
+                        )}
+                        {imageSelected && !imageUploaded && (
+                          <div className="image-upload-status image-upload-status--warn">
+                            <AlertCircle size={14} /> Image selected — click "Store Image" to upload
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -997,12 +1182,33 @@ export default function AdminPanel({ products, setProducts, setCurrentPage }) {
                       className="btn btn--ghost" 
                       style={{ border: '1px solid rgba(255, 255, 255, 0.2)', color: 'var(--clr-cream)' }}
                       onClick={() => setActiveTab('manage')}
+                      disabled={isSubmittingProduct}
                     >
                       Cancel
                     </button>
-                    <button type="submit" className="btn btn--gold">
-                      <Check size={16} /> {editingProduct ? 'Save Changes' : 'Publish Spice'}
+                    <button 
+                      type="submit" 
+                      className={`btn btn--gold${isSubmittingProduct ? ' btn--loading' : ''}`}
+                      disabled={
+                        isSubmittingProduct ||
+                        isUploadingImage ||
+                        !imageUploaded ||
+                        !isValidSupabaseUrl(formImage) ||
+                        !formId?.trim() ||
+                        !formName?.trim()
+                      }
+                      title={
+                        !imageUploaded ? 'Upload an image first'
+                        : !formId?.trim() || !formName?.trim() ? 'Fill all required fields'
+                        : ''
+                      }
+                    >
+                      {isSubmittingProduct
+                        ? <><Loader2 size={16} className="spin-icon" /> {editingProduct ? 'Updating...' : 'Publishing...'}</>
+                        : <><Check size={16} /> {editingProduct ? 'Update Product' : 'Publish Spice'}</>
+                      }
                     </button>
+
                   </div>
 
                 </form>
