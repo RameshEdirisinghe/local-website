@@ -23,7 +23,9 @@ verifyBucket().catch(err =>
 
 // Routes
 const productRoutes = require('./routes/product.routes');
+const orderRoutes = require('./routes/order.routes');
 app.use('/api/products', productRoutes);
+app.use('/api/orders', orderRoutes);
 
 app.get('/', (req, res) => {
   res.send('Spice Shop Backend is running');

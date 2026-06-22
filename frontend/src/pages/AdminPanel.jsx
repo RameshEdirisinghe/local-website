@@ -37,13 +37,33 @@ export default function AdminPanel({ products, setProducts, setCurrentPage }) {
   const [password, setPassword] = useState('')
   const [loginError, setLoginError] = useState('')
 
-  const [activeTab, setActiveTab] = useState('overview') // 'overview', 'manage', 'add-edit'
+  const [activeTab, setActiveTab] = useState('overview') // 'overview', 'manage', 'add-edit', 'orders'
   const [editingProduct, setEditingProduct] = useState(null) // product object if editing, null if creating
   
+  // Orders management state
+  const [orders, setOrders] = useState([])
+  const [isLoadingOrders, setIsLoadingOrders] = useState(false)
+
   // Activities log state
   const [activities, setActivities] = useState([])
 
-  // Auth checking on mount
+  const fetchOrders = async () => {
+    setIsLoadingOrders(true)
+    const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
+    try {
+      const res = await fetch(`${baseUrl}/api/orders`)
+      if (res.ok) {
+        const data = await res.json()
+        setOrders(data)
+      }
+    } catch (e) {
+      console.error('Error fetching orders:', e)
+    } finally {
+      setIsLoadingOrders(false)
+    }
+  }
+
+  // Auth checking, activities, and initial orders loading on mount
   useEffect(() => {
     const loggedIn = sessionStorage.getItem('admin_authenticated') === 'true'
     if (loggedIn) {
@@ -62,7 +82,16 @@ export default function AdminPanel({ products, setProducts, setCurrentPage }) {
       setActivities(initialLogs)
       localStorage.setItem('admin_activity_logs', JSON.stringify(initialLogs))
     }
+
+    fetchOrders()
   }, [])
+
+  // Poll or refresh orders whenever relevant tabs are selected
+  useEffect(() => {
+    if (activeTab === 'orders' || activeTab === 'overview') {
+      fetchOrders()
+    }
+  }, [activeTab])
 
   const addActivityLog = (text) => {
     const newLog = {
@@ -152,6 +181,29 @@ export default function AdminPanel({ products, setProducts, setCurrentPage }) {
     } catch (e) {
       console.error(e)
       toast.error('❌ Network error while deleting product.')
+    }
+  }
+
+  // Confirm pending order — updates database status, triggers toast, and re-fetches
+  const handleConfirmOrder = async (orderId, customerName) => {
+    if (!window.confirm(`Are you sure you want to confirm Order "${orderId}" for ${customerName}?`)) return
+    
+    const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
+    try {
+      const res = await fetch(`${baseUrl}/api/orders/${orderId}/confirm`, {
+        method: 'PUT',
+      })
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}))
+        toast.error(`❌ Failed to confirm order: ${err.error || 'Unknown error'}`)
+        return
+      }
+      toast.success(`✅ Order ${orderId} confirmed!`)
+      addActivityLog(`Order "${orderId}" confirmed for customer ${customerName}.`)
+      fetchOrders()
+    } catch (e) {
+      console.error(e)
+      toast.error('❌ Network error while confirming order.')
     }
   }
 
@@ -577,6 +629,14 @@ export default function AdminPanel({ products, setProducts, setCurrentPage }) {
               <Plus size={18} />
               <span>Add Product</span>
             </div>
+
+            <div 
+              className={`admin-nav-item ${activeTab === 'orders' ? 'admin-nav-item--active' : ''}`}
+              onClick={() => setActiveTab('orders')}
+            >
+              <FileText size={18} />
+              <span>Manage Orders</span>
+            </div>
           </nav>
 
           <div className="admin-sidebar-footer">
@@ -625,11 +685,11 @@ export default function AdminPanel({ products, setProducts, setCurrentPage }) {
 
                 <div className="admin-stat-card glass">
                   <div className="admin-stat-icon">
-                    <FileText size={24} />
+                    <FileText size={24} style={{ color: orders.filter(o => o.status === 'PENDING').length > 0 ? 'var(--clr-gold)' : 'inherit' }} />
                   </div>
                   <div className="admin-stat-info">
-                    <span className="admin-stat-value">{totalGrades}</span>
-                    <span className="admin-stat-label">Unique Grades</span>
+                    <span className="admin-stat-value">{orders.filter(o => o.status === 'PENDING').length}</span>
+                    <span className="admin-stat-label">Pending Orders</span>
                   </div>
                 </div>
 
@@ -782,6 +842,107 @@ export default function AdminPanel({ products, setProducts, setCurrentPage }) {
                   </tbody>
                 </table>
               </div>
+            </section>
+          )}
+
+          {/* TAB: MANAGE ORDERS */}
+          {activeTab === 'orders' && (
+            <section className="animate-fade-in">
+              <div className="admin-section-header">
+                <h1>Manage Customer Orders</h1>
+                <p>Verify customer details, review cart selections, and confirm pending orders.</p>
+              </div>
+
+              {isLoadingOrders ? (
+                <div style={{ display: 'flex', justifyContent: 'center', padding: '40px' }}>
+                  <Loader2 className="animate-spin" size={32} style={{ color: 'var(--clr-gold)' }} />
+                </div>
+              ) : (
+                <div className="table-responsive-container">
+                  <table className="admin-table">
+                    <thead>
+                      <tr>
+                        <th>Order ID / Date</th>
+                        <th>Customer Details</th>
+                        <th>Purchased Items</th>
+                        <th>Totals Summary</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {orders.map((order) => {
+                        const orderCurrencySymbol = { USD: '$', LKR: 'Rs. ', EUR: '€' }[order.currency] || '$'
+                        return (
+                          <tr key={order.id}>
+                            <td>
+                              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                <strong style={{ color: 'var(--clr-gold)', fontFamily: 'monospace', fontSize: '15px' }}>{order.id}</strong>
+                                <span style={{ fontSize: '11px', color: 'var(--clr-muted)', marginTop: '4px' }}>
+                                  {new Date(order.createdAt).toLocaleString()}
+                                </span>
+                              </div>
+                            </td>
+                            <td>
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', fontSize: '12px' }}>
+                                <strong>{order.userDetails.name}</strong>
+                                <span style={{ color: 'var(--clr-text-light)' }}>📞 {order.userDetails.phone}</span>
+                                <span style={{ color: 'var(--clr-muted)', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis' }} title={order.userDetails.address}>
+                                  📍 {order.userDetails.address}
+                                </span>
+                              </div>
+                            </td>
+                            <td>
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '12px' }}>
+                                {order.items.map((item, idx) => (
+                                  <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', gap: '12px' }}>
+                                    <span>
+                                      {item.name} <small style={{ color: 'var(--clr-gold-dark)', fontWeight: '600' }}>({item.grade})</small>
+                                    </span>
+                                    <strong>{item.quantity}{item.unit || 'kg'}</strong>
+                                  </div>
+                                ))}
+                              </div>
+                            </td>
+                            <td>
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', fontSize: '12px' }}>
+                                <span style={{ color: 'var(--clr-muted)' }}>Subtotal: {orderCurrencySymbol}{order.subtotal.toLocaleString()}</span>
+                                <span style={{ color: 'var(--clr-muted)' }}>Shipping: {orderCurrencySymbol}{order.shipping.toLocaleString()}</span>
+                                <strong style={{ color: 'var(--clr-cream)', fontSize: '13px' }}>Total: {orderCurrencySymbol}{order.total.toLocaleString()}</strong>
+                              </div>
+                            </td>
+                            <td>
+                              <span className={`admin-badge ${order.status === 'CONFIRMED' ? 'admin-badge--active' : 'admin-badge--inactive'}`} style={{ textTransform: 'uppercase', padding: '4px 8px', borderRadius: '4px' }}>
+                                {order.status}
+                              </span>
+                            </td>
+                            <td>
+                              {order.status === 'PENDING' && (
+                                <button
+                                  className="action-icon-btn"
+                                  style={{ background: 'var(--clr-forest-light)', color: 'var(--clr-cream)', padding: '6px 12px', display: 'flex', alignItems: 'center', gap: '4px', borderRadius: '4px', width: 'auto', height: 'auto' }}
+                                  title="Confirm Order"
+                                  onClick={() => handleConfirmOrder(order.id, order.userDetails.name)}
+                                >
+                                  <Check size={14} />
+                                  <span style={{ fontSize: '11px', fontWeight: '600' }}>Confirm</span>
+                                </button>
+                              )}
+                            </td>
+                          </tr>
+                        )
+                      })}
+                      {orders.length === 0 && (
+                        <tr>
+                          <td colSpan="6" style={{ textAlign: 'center', padding: '40px', color: 'var(--clr-muted)' }}>
+                            No orders placed yet.
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </section>
           )}
 

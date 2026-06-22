@@ -816,3 +816,118 @@
     font-size: 14px;
   }
 }
+
+/* Direct Checkout Grid Layout */
+.direct-checkout-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 28px;
+}
+
+@media (max-width: 768px) {
+  .direct-checkout-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+.cart-items-summary-card {
+  background: rgba(197, 157, 95, 0.04);
+  border: 1px solid rgba(197, 157, 95, 0.2);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cart-summary-title {
+  font-family: var(--ff-display);
+  font-size: 1.25rem;
+  color: var(--clr-forest);
+  border-bottom: 1px solid rgba(10, 31, 17, 0.1);
+  padding-bottom: 8px;
+  margin: 0;
+}
+
+.cart-items-list-scroll {
+  max-height: 280px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-right: 8px;
+}
+
+.cart-summary-item-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid rgba(10, 31, 17, 0.05);
+  padding-bottom: 8px;
+}
+
+.cart-summary-item-img {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  background: var(--clr-cream);
+  border: 1px solid var(--clr-border);
+}
+
+.cart-summary-item-details {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.cart-summary-item-name {
+  font-family: var(--ff-ui);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--clr-forest);
+}
+
+.cart-summary-item-grade {
+  font-size: 11px;
+  color: var(--clr-gold-dark);
+  font-weight: 500;
+}
+
+.cart-summary-item-qty {
+  font-size: 11px;
+  color: var(--clr-muted);
+}
+
+.cart-summary-item-price {
+  font-family: var(--ff-ui);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--clr-text);
+  text-align: right;
+}
+
+.cart-totals-breakdown {
+  border-top: 1px solid rgba(10, 31, 17, 0.1);
+  padding-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cart-total-line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--clr-text);
+}
+
+.cart-total-line--grand {
+  border-top: 1.5px solid var(--clr-gold);
+  padding-top: 8px;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--clr-forest);
+}
+
