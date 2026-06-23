@@ -195,7 +195,7 @@ export default function Gallery({ language }) {
                   </div>
                 </div>
               ) : (
-                <img src={img.url} alt={img.title[language]} className="gallery-card-img" />
+                <img src={img.url} alt={img.title[language]} className="gallery-card-img" loading="lazy" />
               )}
               <div className="gallery-card-overlay-details">
                 <span className="gallery-card-badge">

@@ -19,6 +19,7 @@ import {
 } from 'lucide-react'
 import './AdminPanel.css'
 import companyLogo from '../assets/images/company_logo.jpeg'
+import MobileBlock from '../components/MobileBlock'
 
 // Validate that a URL is a real Supabase Storage public URL (not localhost/blob/objectURL)
 const isValidSupabaseUrl = (url) => {
@@ -36,6 +37,16 @@ export default function AdminPanel({ products, setProducts, setCurrentPage }) {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [loginError, setLoginError] = useState('')
+  const [isLoggingIn, setIsLoggingIn] = useState(false)
+
+  // Mobile detection — Admin Panel is desktop/tablet only
+  const [isMobile, setIsMobile] = useState(false)
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   const [activeTab, setActiveTab] = useState('overview') // 'overview', 'manage', 'add-edit', 'orders'
   const [editingProduct, setEditingProduct] = useState(null) // product object if editing, null if creating
@@ -103,16 +114,31 @@ export default function AdminPanel({ products, setProducts, setCurrentPage }) {
     localStorage.setItem('admin_activity_logs', JSON.stringify(updated))
   }
 
-  // Handle Login
-  const handleLogin = (e) => {
+  // Handle Login — verifies credentials against MongoDB via /api/auth/login
+  const handleLogin = async (e) => {
     e.preventDefault()
-    if (username === 'admin' && password === 'adminpassword') {
-      setIsAuthenticated(true)
-      sessionStorage.setItem('admin_authenticated', 'true')
-      setLoginError('')
-      addActivityLog('Administrator logged in successfully.')
-    } else {
-      setLoginError('Invalid username or password. Check credentials below.')
+    setIsLoggingIn(true)
+    setLoginError('')
+    const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
+    try {
+      const res = await fetch(`${baseUrl}/api/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      })
+      const data = await res.json()
+      if (res.ok && data.success) {
+        setIsAuthenticated(true)
+        sessionStorage.setItem('admin_authenticated', 'true')
+        setLoginError('')
+        addActivityLog('Administrator logged in successfully.')
+      } else {
+        setLoginError(data.error || 'Invalid username or password.')
+      }
+    } catch (err) {
+      setLoginError('Unable to connect to server. Please ensure the backend is running.')
+    } finally {
+      setIsLoggingIn(false)
     }
   }
 
@@ -508,6 +534,11 @@ export default function AdminPanel({ products, setProducts, setCurrentPage }) {
     }
   };
 
+  // Block admin access on mobile devices
+  if (isMobile) {
+    return <MobileBlock />
+  }
+
   // Render Login view if not logged in
   if (!isAuthenticated) {
     return (
@@ -553,16 +584,10 @@ export default function AdminPanel({ products, setProducts, setCurrentPage }) {
               </div>
             )}
 
-            <button type="submit" className="admin-login-btn">
-              Authenticate
+            <button type="submit" className="admin-login-btn" disabled={isLoggingIn}>
+              {isLoggingIn ? 'Authenticating…' : 'Authenticate'}
             </button>
           </form>
-
-          <div className="admin-login-hint">
-            <strong>Demo Credentials:</strong><br />
-            Username: <code>admin</code><br />
-            Password: <code>adminpassword</code>
-          </div>
 
           <button 
             className="admin-back-btn" 

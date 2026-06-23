@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useMemo, lazy, Suspense } from 'react'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import Products from './components/Products'
@@ -8,10 +8,32 @@ import Reviews from './components/Reviews'
 import Footer from './components/Footer'
 import Cart from './components/Cart'
 import CheckoutModal from './components/CheckoutModal'
-import ProductDetails from './pages/ProductDetails'
-import AboutCompany from './pages/AboutCompany'
-import AdminPanel from './pages/AdminPanel'
 import { DEFAULT_PRODUCTS } from './data/defaultProducts'
+
+// Lazy-load heavy pages — only bundled and fetched when navigated to
+const ProductDetails = lazy(() => import('./pages/ProductDetails'))
+const AboutCompany   = lazy(() => import('./pages/AboutCompany'))
+const AdminPanel     = lazy(() => import('./pages/AdminPanel'))
+
+// Minimal spinner shown during lazy load
+function PageLoader() {
+  return (
+    <div style={{
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: 'var(--clr-cream)',
+      fontFamily: 'var(--ff-ui)',
+      color: 'var(--clr-muted)',
+      fontSize: '14px',
+      letterSpacing: '0.1em',
+      textTransform: 'uppercase',
+    }}>
+      🌿 Loading…
+    </div>
+  )
+}
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState('home') // 'home', 'product-details', 'about-company', 'admin'
@@ -24,24 +46,24 @@ export default function App() {
   const [toasts, setToasts] = useState([])
 
   // Initialize empty products list – will be populated from backend API
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState([])
 
   // Load products from the backend on mount
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/products`);
-        if (!res.ok) throw new Error('Failed to fetch products');
-        const data = await res.json();
-        setProducts(data);
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/products`)
+        if (!res.ok) throw new Error('Failed to fetch products')
+        const data = await res.json()
+        setProducts(data)
       } catch (err) {
-        console.error(err);
+        console.error(err)
         // Fallback to default products if backend is unreachable
-        setProducts(DEFAULT_PRODUCTS);
+        setProducts(DEFAULT_PRODUCTS)
       }
-    };
-    fetchProducts();
-  }, []);
+    }
+    fetchProducts()
+  }, [])
 
   // Simple location pathname-based client-side router
   useEffect(() => {
@@ -85,15 +107,15 @@ export default function App() {
     }
   }, [buyerType])
 
-  const showToast = (message) => {
+  const showToast = useCallback((message) => {
     const id = Date.now()
     setToasts((prev) => [...prev, { id, message }])
     setTimeout(() => {
       setToasts((prev) => prev.filter((t) => t.id !== id))
     }, 3000)
-  }
+  }, [])
 
-  const addToCart = (product, gradeName, qty, unit, unitPrice) => {
+  const addToCart = useCallback((product, gradeName, qty, unit, unitPrice) => {
     const itemKey = `${product.id}-${gradeName}`
     setCart((prev) => {
       const existing = prev.find((item) => item.key === itemKey)
@@ -122,9 +144,9 @@ export default function App() {
         },
       ]
     })
-  }
+  }, [showToast])
 
-  const updateCartQuantity = (key, qty) => {
+  const updateCartQuantity = useCallback((key, qty) => {
     if (qty <= 0) {
       removeFromCart(key)
       return
@@ -132,29 +154,33 @@ export default function App() {
     setCart((prev) =>
       prev.map((item) => (item.key === key ? { ...item, quantity: qty } : item))
     )
-  }
+  }, [])
 
-  const removeFromCart = (key) => {
-    const item = cart.find((item) => item.key === key)
-    if (item) {
-      showToast(`Removed ${item.name} (${item.grade}) from cart.`)
-    }
-    setCart((prev) => prev.filter((item) => item.key !== key))
-  }
+  const removeFromCart = useCallback((key) => {
+    setCart((prev) => {
+      const item = prev.find((item) => item.key === key)
+      if (item) showToast(`Removed ${item.name} (${item.grade}) from cart.`)
+      return prev.filter((item) => item.key !== key)
+    })
+  }, [showToast])
 
-  const clearCart = () => {
+  const clearCart = useCallback(() => {
     setCart([])
-  }
+  }, [])
 
-  const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0)
+  // Memoize derived values to avoid unnecessary re-renders
+  const cartCount = useMemo(
+    () => cart.reduce((acc, item) => acc + item.quantity, 0),
+    [cart]
+  )
 
   if (currentPage === 'admin') {
     return (
-      <>
-        <AdminPanel 
-          products={products} 
-          setProducts={setProducts} 
-          setCurrentPage={setCurrentPage} 
+      <Suspense fallback={<PageLoader />}>
+        <AdminPanel
+          products={products}
+          setProducts={setProducts}
+          setCurrentPage={setCurrentPage}
         />
         <div className="toast-container">
           {toasts.map((t) => (
@@ -164,7 +190,7 @@ export default function App() {
             </div>
           ))}
         </div>
-      </>
+      </Suspense>
     )
   }
 
@@ -203,8 +229,11 @@ export default function App() {
             <Reviews buyerType={buyerType} language={language} />
           </>
         )}
-        {currentPage === 'product-details' && <ProductDetails language={language} products={products} />}
-        {currentPage === 'about-company' && <AboutCompany language={language} />}
+
+        <Suspense fallback={<PageLoader />}>
+          {currentPage === 'product-details' && <ProductDetails language={language} products={products} />}
+          {currentPage === 'about-company' && <AboutCompany language={language} />}
+        </Suspense>
       </main>
       
       <Footer buyerType={buyerType} language={language} />

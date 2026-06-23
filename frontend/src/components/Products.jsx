@@ -100,6 +100,7 @@ export default function Products({ buyerType, currency, language, addToCart, pro
                   src={p.image || p.imageUrl || ''}
                   alt={p.name}
                   className="product-card-img"
+                  loading="lazy"
                   onError={(e) => {
                     e.target.onerror = null
                     e.target.style.background = 'rgba(197,157,95,0.08)'
