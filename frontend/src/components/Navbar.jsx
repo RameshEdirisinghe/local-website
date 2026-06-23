@@ -27,19 +27,6 @@ export default function Navbar({
     return () => window.removeEventListener('scroll', onScroll)
   }, [currentPage])
 
-  const handleNavClick = (page, hash = '') => {
-    setCurrentPage(page)
-    setMenuOpen(false)
-    if (hash && page === 'home') {
-      setTimeout(() => {
-        const el = document.getElementById(hash.replace('#', ''))
-        if (el) el.scrollIntoView({ behavior: 'smooth' })
-      }, 100)
-    } else if (page !== 'home') {
-      window.scrollTo(0, 0)
-    }
-  }
-
   // Translation sets
   const t = {
     EN: {
@@ -98,9 +85,9 @@ export default function Navbar({
           <a href="#about-company" className={`nav-link ${currentPage === 'about-company' ? 'active' : ''}`} onClick={(e) => { e.preventDefault(); handleNavClick('about-company'); }}>
             {t.company}
           </a>
-          <a href="/admin" className={`nav-link ${currentPage === 'admin' ? 'active' : ''}`} onClick={(e) => { e.preventDefault(); handleNavClick('admin'); }}>
+          {/* <a href="/admin" className={`nav-link ${currentPage === 'admin' ? 'active' : ''}`} onClick={(e) => { e.preventDefault(); handleNavClick('admin'); }}>
             {t.admin}
-          </a>
+          </a> */}
 
           {/* Mobile selectors inside drawer */}
           <div className="mobile-selectors">

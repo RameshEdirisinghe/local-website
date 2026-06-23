@@ -65,35 +65,31 @@ export default function App() {
     fetchProducts()
   }, [])
 
-  // Simple location pathname-based client-side router
+  // Initialize page from URL on first load, then keep URL in sync on navigation
   useEffect(() => {
-    const handleLocationChange = () => {
-      const path = window.location.pathname
-      if (path === '/admin') {
-        setCurrentPage('admin')
-      } else if (path === '/product-details') {
-        setCurrentPage('product-details')
-      } else if (path === '/about-company') {
-        setCurrentPage('about-company')
-      } else {
-        setCurrentPage('home')
-      }
+    const path = window.location.pathname
+
+    // On mount: derive page from URL (handles direct navigation & refresh)
+    const pageFromPath =
+      path === '/admin'           ? 'admin'           :
+      path === '/product-details' ? 'product-details' :
+      path === '/about-company'   ? 'about-company'   :
+      'home'
+
+    if (pageFromPath !== currentPage) {
+      setCurrentPage(pageFromPath)
+      return // let the re-render triggered by setCurrentPage sync the URL next tick
     }
 
-    window.addEventListener('popstate', handleLocationChange)
-    handleLocationChange()
+    // On subsequent renders: keep URL in sync with currentPage state
+    const targetPath =
+      currentPage === 'admin'           ? '/admin'           :
+      currentPage === 'product-details' ? '/product-details' :
+      currentPage === 'about-company'   ? '/about-company'   :
+      '/'
 
-    return () => window.removeEventListener('popstate', handleLocationChange)
-  }, [])
-
-  useEffect(() => {
-    let path = '/'
-    if (currentPage === 'admin') path = '/admin'
-    else if (currentPage === 'product-details') path = '/product-details'
-    else if (currentPage === 'about-company') path = '/about-company'
-
-    if (window.location.pathname !== path) {
-      window.history.pushState(null, '', path)
+    if (window.location.pathname !== targetPath) {
+      window.history.pushState({}, '', targetPath)
     }
   }, [currentPage])
 
