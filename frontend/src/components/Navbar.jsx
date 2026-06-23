@@ -131,6 +131,12 @@ export default function Navbar({
                 <span className="selector-title">{t.currency}</span>
                 <div className="buyer-toggle-buttons">
                   <button
+                    className={`btn-mode ${currency === 'LKR' ? 'active' : ''}`}
+                    onClick={() => setCurrency('LKR')}
+                  >
+                    LKR (Rs.)
+                  </button>
+                  <button
                     className={`btn-mode ${currency === 'USD' ? 'active' : ''}`}
                     onClick={() => setCurrency('USD')}
                   >
@@ -180,6 +186,7 @@ export default function Navbar({
                 onChange={(e) => setCurrency(e.target.value)}
                 className="select-currency"
               >
+                <option value="LKR">LKR (Rs.)</option>
                 <option value="USD">USD ($)</option>
                 <option value="EUR">EUR (€)</option>
               </select>

@@ -15,9 +15,9 @@ import { DEFAULT_PRODUCTS } from './data/defaultProducts'
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState('home') // 'home', 'product-details', 'about-company', 'admin'
-  const [buyerType, setBuyerType] = useState('foreign') // 'local' or 'foreign'
-  const [currency, setCurrency] = useState('USD') // 'USD', 'LKR', 'EUR'
-  const [language, setLanguage] = useState('EN') // 'EN' or 'SI' (Sinhala)
+  const [buyerType, setBuyerType] = useState('foreign') // default to 'foreign'
+  const [currency, setCurrency] = useState('LKR') // default to 'LKR'
+  const [language, setLanguage] = useState('EN') // default to 'EN'
   const [cart, setCart] = useState([])
   const [cartOpen, setCartOpen] = useState(false)
   const [checkoutOpen, setCheckoutOpen] = useState(false)
@@ -77,11 +77,10 @@ export default function App() {
 
   // Adjust currency and language based on buyerType selection automatically
   useEffect(() => {
+    setCurrency('LKR')
     if (buyerType === 'local') {
-      setCurrency('LKR')
       setLanguage('SI')
     } else {
-      setCurrency('USD')
       setLanguage('EN')
     }
   }, [buyerType])

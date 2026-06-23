@@ -266,7 +266,7 @@ export default function AdminPanel({ products, setProducts, setCurrentPage }) {
     setFormPitchTextEn(product.pitch?.text?.EN || '')
     setFormPitchTextSi(product.pitch?.text?.SI || '')
 
-    setFormGrades(product.grades ? [...product.grades] : [])
+    setFormGrades(product.grades ? product.grades.map(g => ({ ...g, basePriceUSD: g.basePriceUSD * 300 })) : [])
     setFormSpecs(product.specifications ? [...product.specifications] : [])
     
     setActiveTab('add-edit')
@@ -298,7 +298,7 @@ export default function AdminPanel({ products, setProducts, setCurrentPage }) {
     setFormPitchTextSi('')
 
     setFormGrades([
-      { name: 'Standard Grade', desc: { EN: 'Standard quality dried spice.', SI: 'සාමාන්‍ය ප්‍රමිතියෙන් යුතු වියළි කුළුබඩු.' }, basePriceUSD: 10 }
+      { name: 'Standard Grade', desc: { EN: 'Standard quality dried spice.', SI: 'සාමාන්‍ය ප්‍රමිතියෙන් යුතු වියළි කුළුබඩු.' }, basePriceUSD: 3000 }
     ])
     setFormSpecs([
       { label: { EN: 'Grade Class', SI: 'ශ්‍රේණි පන්තිය' }, value: { EN: 'Premium Ceylon Standard', SI: 'ප්‍රමිතියෙන් උසස් ලංකා වර්ගය' } }
@@ -454,7 +454,7 @@ export default function AdminPanel({ products, setProducts, setCurrentPage }) {
       grades: formGrades.map(g => ({
         name: g.name,
         desc: { EN: g.desc?.EN || '', SI: g.desc?.SI || '' },
-        basePriceUSD: g.basePriceUSD || 10,
+        basePriceUSD: (g.basePriceUSD || 3000) / 300,
       })),
       certifications: formCerts,
       active: editingProduct ? editingProduct.active : true,
@@ -581,11 +581,11 @@ export default function AdminPanel({ products, setProducts, setCurrentPage }) {
   const activeProducts = products.filter(p => p.active).length
   const totalGrades = products.reduce((acc, p) => acc + (p.grades?.length || 0), 0)
   
-  // Average base price
+  // Average base price in LKR (converted from base USD rate stored in database)
   const allPrices = products.flatMap(p => p.grades?.map(g => g.basePriceUSD) || [])
   const avgPrice = allPrices.length > 0 
-    ? (allPrices.reduce((sum, p) => sum + p, 0) / allPrices.length).toFixed(2)
-    : '0.00'
+    ? Math.round(allPrices.reduce((sum, p) => sum + p, 0) / allPrices.length * 300).toLocaleString()
+    : '0'
 
   return (
     <div className="admin-page-container">
@@ -698,8 +698,8 @@ export default function AdminPanel({ products, setProducts, setCurrentPage }) {
                     <DollarSign size={24} />
                   </div>
                   <div className="admin-stat-info">
-                    <span className="admin-stat-value">${avgPrice}</span>
-                    <span className="admin-stat-label">Avg Grade Price</span>
+                    <span className="admin-stat-value">Rs. {avgPrice}</span>
+                    <span className="admin-stat-label">Avg Grade Price (LKR)</span>
                   </div>
                 </div>
               </div>
@@ -792,7 +792,7 @@ export default function AdminPanel({ products, setProducts, setCurrentPage }) {
                             </span>
                           </td>
                           <td>
-                            <strong style={{ color: 'var(--clr-cream)' }}>${startingPrice} USD</strong>
+                            <strong style={{ color: 'var(--clr-cream)' }}>Rs. {(startingPrice * 300).toLocaleString()}</strong>
                           </td>
                           <td>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -1171,7 +1171,7 @@ export default function AdminPanel({ products, setProducts, setCurrentPage }) {
                           </div>
 
                           <div className="admin-input-group">
-                            <label>Base Price (USD per kg)</label>
+                            <label>Base Price (LKR per kg)</label>
                             <input 
                               type="number" 
                               className="admin-input-field" 
